@@ -1,0 +1,5 @@
+tomar
+to take
+tomo,tomas,toma,tomamos,toman
+tomé,tomaste,tomó,tomamos,tomaron
+tomaba,tomabas,tomaba,tomábamos,tomaban

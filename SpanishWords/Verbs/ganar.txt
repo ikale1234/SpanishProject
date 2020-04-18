@@ -1,0 +1,5 @@
+ganar
+to win
+gano,ganas,gana,ganamos,ganan
+gané,ganaste,ganó,ganamos,ganaron
+ganaba,ganabas,ganaba,ganábamos,ganaban

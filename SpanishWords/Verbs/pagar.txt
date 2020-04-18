@@ -1,0 +1,5 @@
+pagar
+to pay
+pago,pagas,paga,pagamos,pagan
+pagué,pagaste,pagó,pagamos,pagaron
+pagaba,pagabas,pagabas,pagábamos,pagaban
