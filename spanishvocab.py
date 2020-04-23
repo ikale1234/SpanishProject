@@ -9,7 +9,13 @@ nlist = []
 points= 0
 
 # functions
-def getlist():
+
+def betweenStatements(statement):
+    print("\n")
+    print(statement)
+    input("\nPress Enter to Continue:")
+
+def getList():
     if len(sys.argv) == 1:
         listdata = verborganizer.build("SpanishWords")
     elif len(sys.argv) == 2:
@@ -21,82 +27,76 @@ def getlist():
             quit()
     return listdata
 
-def getDifficulty(x):
-    if x == "1":
-        num = "1"
-    if x == "2":
-        num = "2"
-    if x == "3":
-        num = "3"
+def getDifficulty(level):
+    if level == "1":
+        num = 1
+    if level == "2":
+        num = 2
+    if level == "3":
+        num = 3
     return num
-def convertlist(verbs, nouns, z, x):
-    for a in range(len(z["Verbs"])):
-        if getDifficulty(x) ==  z["Verbs"][a]["Difficulty"]:
-            verbs.append(z["Verbs"][a]["Infinitive"])
-    for a in range(len(z["Nouns"])):
-        if getDifficulty(x) ==  z["Nouns"][a]["Difficulty"]:
-            nouns.append(z["Nouns"][a]["Spanish"])
 
-# listdata = getlist()
-# convertlist(vlist, nlist, listdata)
-# print(nlist)
-# quit()
-def getgamevalues(vlist, listdata):
-    x = random.choice([vlist, nlist])
-    r = random.sample(x, 5)
+def convertList(verbs, nouns, listdata, level):
+    for verb in listdata["Verbs"]:
+        if getDifficulty(level) ==  verb["Difficulty"]:
+            verbs.append(verb["Infinitive"])
+    for noun in listdata["Nouns"]:
+        if getDifficulty(level) ==  noun["Difficulty"]:
+            nouns.append(noun["Spanish"])
 
-    word = random.choice(r)
-    if x == vlist:
-        for i in range(len(listdata["Verbs"])):
-            if word == listdata["Verbs"][i]["Infinitive"]:
-                english = listdata["Verbs"][i]["English"]
-    if x == nlist:
-        for i in range(len(listdata["Nouns"])):
-            if word == listdata["Nouns"][i]["Spanish"]:
-                english = listdata["Nouns"][i]["English"]
-    return word, english, r
+def getGameValues(vlist, listdata):
+    lchoice = random.choice([vlist, nlist])
+    samplelist = random.sample(lchoice, 5)
+
+    word = random.choice(samplelist)
+    if lchoice == vlist:
+        for verb in listdata["Verbs"]:
+            if word == verb["Infinitive"]:
+                english = verb["English"]
+    if lchoice == nlist:
+        for noun in listdata["Nouns"]:
+            if word == noun["Spanish"]:
+                english = noun["English"]
+    return word, english, samplelist
 
 
-def getuserguess(eng, r, word):
-    guess = input("What is the spanish word for "+eng+"? \nA: "+r[0]+"\nB: "+r[1]+ "\nC: "+ r[2]+ "\nD: "+ r[3]+ "\nE: "+ r[4]+"\n")
-    if word == r[0]:
+def getUserGuess(eng, samplelist, word):
+    guess = input("What is the spanish word for "+eng+"? \nA: "+samplelist[0]+"\nB: "+samplelist[1]+ "\nC: "+ samplelist[2]+ "\nD: "+ samplelist[3]+ "\nE: "+ samplelist[4]+"\n\n")
+    if word == samplelist[0]:
         let = "A"
-    if word == r[1]:
+    if word == samplelist[1]:
         let = "B"
-    if word == r[2]:
+    if word == samplelist[2]:
         let = "C"
-    if word == r[3]:
+    if word == samplelist[3]:
         let = "D"
-    if word == r[4]:
+    if word == samplelist[4]:
         let = "E"
     return let, guess
 
-def checkifright(guess, let):
+def checkIfRight(guess, let):
     rightlist = ["Good Job! You got it right!", "Nice! That's right!", "That is the correct answer!", "You are good at this!", "Wow! That was cool how you got it right!"]
-    wronglist = ["You suck! That was the wrong answer!", "How did you miss that! That was easy!", "That is the wrong answer.", "That is completely incorrect!", "Are you stupid? That was wrong!"]
+    wronglist = ["That was the wrong answer! Nice try though.", "How did you miss that! That was easy!", "That is the wrong answer.", "That is completely incorrect!", "That was wrong!"]
     global points
     if guess == let or guess == let.lower():
         points+=1
-        print("\n\n")
-        print(random.choice(rightlist))
-        input("\n\nPress Enter to Continue:")
+        print("\n")
+        betweenStatements(random.choice(rightlist))
     else:
-        print("\n\n")
-        print(random.choice(wronglist))
-        input("\n\nPress Enter to Continue:")
-# game
-listdata = getlist()
-x = input ("What is the difficulty of words you want? 1 for easiest, 3 for hardest: ")
-convertlist(vlist, nlist, listdata, x)
+        betweenStatements(random.choice(wronglist))
+
+listdata = getList()
+level = input ("What is the difficulty of words you want? 1 for easiest, 3 for hardest: ")
+convertList(vlist, nlist, listdata, level)
 print (vlist)
 
 for e in range(10):
 
-    word, eng, r = getgamevalues(vlist, listdata)
+    word, eng, samplelist = getGameValues(vlist, listdata)
     
-    let, guess = getuserguess(eng, r, word)
+    let, guess = getUserGuess(eng, samplelist, word)
 
-    checkifright(guess, let)
+    checkIfRight(guess, let)
   
 print("You got", points, "/ 10 right.")
 

@@ -4,7 +4,12 @@ import verborganizer
 import sys
 points= 0
 
-def getlist():
+def betweenStatements(statement):
+    print("\n")
+    print(statement)
+    input("\nPress Enter to Continue:")
+
+def getList():
     if len(sys.argv) == 1:
         alldata = verborganizer.build("SpanishWords")
         listdata = alldata["Verbs"]
@@ -19,45 +24,45 @@ def getlist():
         quit()
     return listdata
 
-listdata = getlist()
+listdata = getList()
 
-def getgamevalues(listdata):
-    r = []
-    a = -1
-    for b in range (6):
-        if b == 0:
+def getGameValues(listdata):
+    samplelist = []
+    repeatcount = -1
+    for idx in range (6):
+        if idx == 0:
             i = random.randrange((len(listdata)))
         j = random.choice(["Present", "Preterite", "Imperfect"])
-        if b > a:
+        if idx > repeatcount:
             k = random.randrange(0,5)
         word = listdata[i][j][k]
         
         
-        if b == 0:
-                x, y, z = i, j, k
+        if idx == 0:
+                doc, tense, form = i, j, k
                 if word[-4:] == "amos":
-                    a = 1
+                    repeatcount = 1
                 else:
-                    a = 2
+                    repeatcount = 2
         # checks repeating
         restart = True
         while restart:
             restart = False
-            for c in range(len(r)):
-                while word == r[c]:
+            for c in range(len(samplelist)):
+                while word == samplelist[c]:
                     j = random.choice(["Present", "Preterite", "Imperfect"])
-                    if b > a:
+                    if idx > a:
                         k = random.randrange(0,5)
                     word = listdata[i][j][k]
     
         
-            r.append(word)
-    right = r[0]
-    random.shuffle(r)
+            samplelist.append(word)
+    right = samplelist[0]
+    random.shuffle(samplelist)
     
-    return x, y, z, r, right
+    return doc, tense, form, samplelist, right
 
-def getquestionvals():
+def getQuestionVals():
     if j == "Present":
         tense = "present"
     if j == "Preterite":
@@ -76,44 +81,41 @@ def getquestionvals():
         form = random.choice(["ellos","ellas","ustedes"])
     return tense, form
 
-def getinput(tense, right, r, listdata, i, form):
-    guess = input("What is the "+tense+" tense of "+listdata[i]["Infinitive"]+" in the "+form+"? \nA: "+r[0]+"\nB: "+r[1]+ "\nC: "+ r[2]+ "\nD: "+ r[3]+ "\nE: "+ r[4]+"\nF: "+ r[5]+"\n")
-    if right == r[0]:
+def getInput(tense, right, samplelist, listdata, idx, form):
+    guess = input("What is the "+tense+" tense of "+listdata[idx]["Infinitive"]+" in the "+form+"? \nA: "+r[0]+"\nB: "+r[1]+ "\nC: "+ r[2]+ "\nD: "+ r[3]+ "\nE: "+ r[4]+"\nF: "+ r[5]+"\n")
+    if right == samplelist[0]:
         let = "A"
-    if right == r[1]:
+    if right == samplelist[1]:
         let = "B"
-    if right == r[2]:
+    if right == samplelist[2]:
         let = "C"
-    if right == r[3]:
+    if right == samplelist[3]:
         let = "D"
-    if right == r[4]:
+    if right == samplelist[4]:
         let = "E"
-    if right == r[5]:
+    if right == samplelist[5]:
         let = "F"
     return guess, let
 
-def checkifright(guess, let):
+def checkIfRight(guess, let):
     global points
     rightlist = ["Good Job! You got it right!", "Nice! That's right!", "That is the correct answer!", "You are good at this!", "Wow! That was cool how you got it right!"]
     wronglist = ["You suck! That was the wrong answer!", "How did you miss that! That was easy!", "That is the wrong answer.", "That is completely incorrect!", "Are you stupid? That was wrong!"]
     if guess == let or guess == let.lower():
         points+=1
-        print("\n\n")
-        print(random.choice(rightlist))
-        input("\n\nPress Enter to Continue:")
+        betweenStatements(random.choice(rightlist))
     else:
-        print("\n\n")
-        print(random.choice(wronglist))
-        input("\n\nPress Enter to Continue:")
+        betweenStatements(random.choice(wronglist))
+
 for a in range(10):
  
-    i, j, k, r, right = getgamevalues(listdata)
+    idx, j, k, samplelist, right = getGameValues(listdata)
     
-    tense, form = getquestionvals()
+    tense, form = getQuestionVals()
     
-    guess, let = getinput(tense, right, r, listdata, i, form)
+    guess, let = getInput(tense, right, samplelist, listdata, idx, form)
     
-    checkifright(guess, let)
+    checkIfRight(guess, let)
             
 
 print("You got", points, "/ 10 right.")
