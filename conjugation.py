@@ -21,7 +21,7 @@ def getlist():
 
 listdata = getlist()
 
-def getgamevalues():
+def getgamevalues(listdata):
     r = []
     a = -1
     for b in range (6):
@@ -76,7 +76,7 @@ def getquestionvals():
         form = random.choice(["ellos","ellas","ustedes"])
     return tense, form
 
-def getinput():
+def getinput(tense, right, r, listdata, i, form):
     guess = input("What is the "+tense+" tense of "+listdata[i]["Infinitive"]+" in the "+form+"? \nA: "+r[0]+"\nB: "+r[1]+ "\nC: "+ r[2]+ "\nD: "+ r[3]+ "\nE: "+ r[4]+"\nF: "+ r[5]+"\n")
     if right == r[0]:
         let = "A"
@@ -92,26 +92,28 @@ def getinput():
         let = "F"
     return guess, let
 
-def checkifright():
+def checkifright(guess, let):
     global points
+    rightlist = ["Good Job! You got it right!", "Nice! That's right!", "That is the correct answer!", "You are good at this!", "Wow! That was cool how you got it right!"]
+    wronglist = ["You suck! That was the wrong answer!", "How did you miss that! That was easy!", "That is the wrong answer.", "That is completely incorrect!", "Are you stupid? That was wrong!"]
     if guess == let or guess == let.lower():
         points+=1
         print("\n\n")
-        print("You got a point.")
+        print(random.choice(rightlist))
         input("\n\nPress Enter to Continue:")
     else:
         print("\n\n")
-        print("You got that question wrong.")
+        print(random.choice(wronglist))
         input("\n\nPress Enter to Continue:")
 for a in range(10):
  
-    i, j, k, r, right = getgamevalues()
+    i, j, k, r, right = getgamevalues(listdata)
     
     tense, form = getquestionvals()
     
-    guess, let = getinput()
+    guess, let = getinput(tense, right, r, listdata, i, form)
     
-    checkifright()
+    checkifright(guess, let)
             
 
 print("You got", points, "/ 10 right.")

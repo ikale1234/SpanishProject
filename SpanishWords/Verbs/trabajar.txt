@@ -3,3 +3,4 @@ to work
 trabajo,trabajas,trabaja,trabajamos,trabajan
 trabajé,trabajaste,trabajó,trabajamos,trabajaron
 trabajaba,trabajabas,trabajaba,trabajábamos,trabajaban
+1

@@ -12,7 +12,7 @@ def build(dir):
         curfile = open(dir+"\\Verbs\\"+verbs[i], "r")
         pol = []
         templist = {}
-        for j in range(5):
+        for j in range(6):
             pol.append(curfile.readline())
             if pol[j][-1:] == "\n":
                 pol[j] = pol[j][:-1]
@@ -29,6 +29,9 @@ def build(dir):
             if j == 4:
                 pol[j] = pol[j].split(",")
                 templist["Imperfect"] = pol[j]
+            if j == 5:
+                templist["Difficulty"] = pol[j]
+
         curfile.close()
         #check
 
@@ -45,13 +48,17 @@ def build(dir):
         templist = {}
         x = curfile.readline()
         y = curfile.readline()
+        z = curfile.readline()
         if x[-1:] == "\n":
             x = x[:-1]
         if y[-1:] == "\n":
             y = y[:-1]  
+        if z[-1:] == "\n":
+            z = z[:-1]
         curfile.close()
         templist["Spanish"] = x
         templist["English"] = y
+        templist["Difficulty"] = z
         nounbank.append(templist)
     wordbank["Verbs"] = verbbank
     wordbank["Nouns"] = nounbank

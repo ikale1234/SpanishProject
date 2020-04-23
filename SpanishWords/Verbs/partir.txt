@@ -3,3 +3,4 @@ to leave
 parto,partes,parte,partimos,parten
 partí,partiste,partió,partimos,partieron
 partía,partías,partía,partíamos,partían
+3

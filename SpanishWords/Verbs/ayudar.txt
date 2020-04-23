@@ -3,3 +3,4 @@ to help
 ayudo,ayudas,ayuda,ayudamos,ayudan
 ayudé,ayudaste,ayudó,ayudamos,ayudaron
 ayudaba,ayudabas,ayudaba,ayudábamos,ayudabaron
+3

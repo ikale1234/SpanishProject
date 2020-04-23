@@ -3,3 +3,4 @@ to eat
 como,comes,come,comemos,comen
 comí,comiste,comió,comimos,comieron
 comía,comías,comía,comíamos,comían
+1
