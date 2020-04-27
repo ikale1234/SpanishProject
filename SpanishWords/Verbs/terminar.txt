@@ -1,6 +1,6 @@
 terminar
-to end
-termino,terminas,termina,terminamos,terminan
-terminé,terminaste,terminó,terminamos,terminaron
-terminaba,terminabas,terminaba,terminábamos,terminaban
-3
+to finish, end
+6
+termino, terminas, termina, terminamos, terminan
+terminé, terminaste, terminó, terminamos, terminaron
+terminaba, terminabas, terminaba, terminábamos, terminaban

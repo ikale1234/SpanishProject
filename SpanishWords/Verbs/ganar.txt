@@ -1,6 +1,6 @@
 ganar
-to win
-gano,ganas,gana,ganamos,ganan
-gané,ganaste,ganó,ganamos,ganaron
-ganaba,ganabas,ganaba,ganábamos,ganaban
-2
+to win, gain, earn, get, acquire
+3
+gano, ganas, gana, ganamos, ganan
+gané, ganaste, ganó, ganamos, ganaron
+ganaba, ganabas, ganaba, ganábamos, ganaban

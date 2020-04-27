@@ -1,0 +1,6 @@
+caminar
+to walk, go
+8
+camino, caminas, camina, caminamos, caminan
+caminé, caminaste, caminó, caminamos, caminaron
+caminaba, caminabas, caminaba, caminábamos, caminaban

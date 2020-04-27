@@ -1,6 +1,6 @@
 recibir
-to recieve
-recibo,recibes,recibe,recibimos,reciben
-recib√≠,recibiste,recibi√≥,recibimos,recibieron
-recib√≠a,recib√≠as,recib√≠a,recib√≠amos,recib√≠an
+to receive; to welcome, greet
 2
+recibo, recibes, recibe, recibimos, reciben
+recib√\xad, recibiste, recibi√≥, recibimos, recibieron
+recib√\xada, recib√\xadas, recib√\xada, recib√\xadamos, recib√\xadan

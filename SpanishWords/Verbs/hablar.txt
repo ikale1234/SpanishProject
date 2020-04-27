@@ -1,6 +1,6 @@
 hablar
 to speak
-hablo,hablas,habla,hablamos,hablan
-hablé,hablaste,habló,hablamos,hablaron
-hablaba,hablabas,hablaba,hablábamos,hablaban
 1
+hablo, hablas, habla, hablamos, hablan
+hablé, hablaste, habló, hablamos, hablaron
+hablaba, hablabas, hablaba, hablábamos, hablaban

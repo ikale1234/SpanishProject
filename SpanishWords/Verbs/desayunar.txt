@@ -1,0 +1,6 @@
+desayunar
+to eat breakfast, have breakfast
+7
+desayuno, desayunas, desayuna, desayunamos, desayunan
+desayuné, desayunaste, desayunó, desayunamos, desayunaron
+desayunaba, desayunabas, desayunaba, desayunábamos, desayunaban

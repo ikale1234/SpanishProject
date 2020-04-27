@@ -1,6 +1,0 @@
-escuchar
-to listen
-escucho,escuchas,escucha,escuchamos,escuchan
-escuché,escuchaste,escuchaste,escuchamos,escucharon
-escuchaba,escuchabas,escuchaba,escuchábamos,escuchaban
-2

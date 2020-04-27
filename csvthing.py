@@ -1,5 +1,6 @@
 import csv
 import sys
+import random
 filename = '..\\jehle_verb_database.csv.txt'
 biglist = []
 with open(filename, newline='') as f:
@@ -20,14 +21,6 @@ def conjConvert(index, data):
     return x
 
 
-def checkCount(count, num, diff):
-    if count > num:
-        difficulty = diff
-        return difficulty
-    else:
-        return -1
-
-
 diff = 0
 
 
@@ -39,30 +32,10 @@ def processWord(data, count):
     if (len(data) >= 14):
         totext.append(data[0][0])
         totext.append(data[0][1])
+        totext.append(str(random.randrange(1, 10)))
         totext.append(conjConvert(0, data))
         totext.append(conjConvert(3, data))
         totext.append(conjConvert(2, data))
-        if count > 0:
-            difficulty = "1"
-        if count > 50:
-            difficulty = "2"
-        if count > 100:
-            difficulty = "3"
-        totext.append(difficulty)
-        '''if x != -1:
-            x = checkCount(count, 0, 1)
-        if x != -1:
-            x = checkCount(count, 0, 1)
-        if x != -1:
-            x = checkCount(count, 0, 1)
-        if x != -1:
-            x = checkCount(count, 0, 1)
-        if x != -1:
-            x = checkCount(count, 0, 1)
-        if x != -1:
-            x = checkCount(count, 0, 1)
-        if x != -1:
-            x = checkCount(count, 0, 1)'''
 
     return totext
 
@@ -82,7 +55,7 @@ for item in biglist:
 
 for item in textlist:
     if item != []:
-        f = open("DataforSpanish\\" + item[0] + ".txt", "w")
+        f = open("SpanishWords\\Verbs\\" + item[0] + ".txt", "w")
         for element in item:
             f.write(element + '\n')
         f.close()

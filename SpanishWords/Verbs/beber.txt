@@ -1,6 +1,6 @@
 beber
 to drink
-bebo,bebes,bebe,bebemos,beben
-bebÃ­,bebiste,bebiÃ³,bebimos,bebieron
-bebÃ­a,bebÃ­as,bebÃ­a,bebÃ­amos,bebÃ­an
-1
+7
+bebo, bebes, bebe, bebemos, beben
+bebÃ\xad, bebiste, bebiÃ³, bebimos, bebieron
+bebÃ\xada, bebÃ\xadas, bebÃ\xada, bebÃ\xadamos, bebÃ\xadan

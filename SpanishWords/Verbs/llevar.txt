@@ -1,6 +1,6 @@
 llevar
-to carry
-llevo,llevas,lleva,llevamos,llevan
-llevé,llevaste,llevó,llevamos,llevaron
-llevaba,llevabas,llevaba,llevábamos,llevaban
-3
+to carry, bring
+8
+llevo, llevas, lleva, llevamos, llevan
+llevé, llevaste, llevó, llevamos, llevaron
+llevaba, llevabas, llevaba, llevábamos, llevaban

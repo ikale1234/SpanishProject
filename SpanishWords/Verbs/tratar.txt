@@ -1,6 +1,6 @@
 tratar
-to treat
-trato,tratas,trata,tratamos,tratan
-traté,trataste,trató,tratamos,trataron
-trataba,tratabas,trataba,tratábamos,trataban
-3
+to treat, handle
+4
+trato, tratas, trata, tratamos, tratan
+traté, trataste, trató, tratamos, trataron
+trataba, tratabas, trataba, tratábamos, trataban

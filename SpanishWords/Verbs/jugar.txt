@@ -1,0 +1,6 @@
+jugar
+to play
+7
+juego, juegas, juega, jugamos, juegan
+jugué, jugaste, jugó, jugamos, jugaron
+jugaba, jugabas, jugaba, jugábamos, jugaban

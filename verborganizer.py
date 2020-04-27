@@ -1,15 +1,16 @@
 import os
 
+
 def build(dir):
     verbbank = []
     nounbank = []
     wordbank = {}
-    verbs =  os.listdir(dir+"\\Verbs")
+    verbs = os.listdir(dir+"\\Verbs")
     nouns = os.listdir(dir+"\\Nouns")
 
     #  verbs
     for i in range(len(verbs)):
-        curfile = open(dir+"\\Verbs\\"+verbs[i], "r", encoding = "utf-8")
+        curfile = open(dir+"\\Verbs\\"+verbs[i], "r", encoding="ISO-8859-1")
         pol = []
         templist = {}
         for j in range(6):
@@ -20,23 +21,21 @@ def build(dir):
                 templist["Infinitive"] = pol[j]
             if j == 1:
                 templist["English"] = pol[j]
-            if j == 2:
-                pol[j] = pol[j].split(",")
-                templist["Present"] = pol[j]
             if j == 3:
                 pol[j] = pol[j].split(",")
-                templist["Preterite"] = pol[j]
+                templist["Present"] = pol[j]
             if j == 4:
                 pol[j] = pol[j].split(",")
-                templist["Imperfect"] = pol[j]
+                templist["Preterite"] = pol[j]
             if j == 5:
+                pol[j] = pol[j].split(",")
+                templist["Imperfect"] = pol[j]
+            if j == 2:
                 templist["Difficulty"] = int(pol[j].strip())
 
         curfile.close()
-        #check
-
-
-        good = False          
+        # check
+        good = False
         if len(templist["Present"]) == len(templist["Preterite"]) == len(templist["Imperfect"]) == 5:
             good = True
         if good:
@@ -44,7 +43,7 @@ def build(dir):
 
     # nouns
     for i in range(len(nouns)):
-        curfile = open(dir+"\\Nouns\\"+nouns[i], "r", encoding = "utf-8")
+        curfile = open(dir+"\\Nouns\\"+nouns[i], "r", encoding="utf-8")
         templist = {}
         x = curfile.readline()
         y = curfile.readline()
@@ -52,7 +51,7 @@ def build(dir):
         if x[-1:] == "\n":
             x = x[:-1]
         if y[-1:] == "\n":
-            y = y[:-1]  
+            y = y[:-1]
         if z[-1:] == "\n":
             z = z[:-1]
         curfile.close()
@@ -63,4 +62,3 @@ def build(dir):
     wordbank["Verbs"] = verbbank
     wordbank["Nouns"] = nounbank
     return wordbank
-

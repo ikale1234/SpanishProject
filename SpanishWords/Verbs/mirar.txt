@@ -1,6 +1,6 @@
 mirar
-to watch
-miro,miras,mira,miramos,miran
-miré,miraste,miró,miramos,miraron
-miraba,mirabas,miraba,mirábamos,miraban
-2
+to watch, look at
+1
+miro, miras, mira, miramos, miran
+miré, miraste, miró, miramos, miraron
+miraba, mirabas, miraba, mirábamos, miraban

@@ -1,6 +1,6 @@
 pagar
-to pay
-pago,pagas,paga,pagamos,pagan
-pagué,pagaste,pagó,pagamos,pagaron
-pagaba,pagabas,pagabas,pagábamos,pagaban
-1
+to pay, pay for
+4
+pago, pagas, paga, pagamos, pagan
+pagué, pagaste, pagó, pagamos, pagaron
+pagaba, pagabas, pagaba, pagábamos, pagaban

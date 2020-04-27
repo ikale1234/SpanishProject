@@ -1,6 +1,6 @@
 comer
 to eat
-como,comes,come,comemos,comen
-com√≠,comiste,comi√≥,comimos,comieron
-com√≠a,com√≠as,com√≠a,com√≠amos,com√≠an
-1
+2
+como, comes, come, comemos, comen
+com√\xad, comiste, comi√≥, comimos, comieron
+com√\xada, com√\xadas, com√\xada, com√\xadamos, com√\xadan
