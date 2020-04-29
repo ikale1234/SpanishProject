@@ -31,16 +31,21 @@ class Game:
         return self.listdata
 
     def getDifficulty(self, level):
+        self.numlist = []
         self.num = int(level)
-        return self.num
+        for i in range(self.num):
+            self.numlist.append(i+1)
+        return self.numlist
 
     def convertList(self):
-        for verb in self.listdata["Verbs"]:
-            if self.getDifficulty(self.view.level) == verb["Difficulty"]:
-                self.vlist.append(verb["Infinitive"])
-        for noun in self.listdata["Nouns"]:
-            if self.getDifficulty(self.view.level) == noun["Difficulty"]:
-                self.nlist.append(noun["Spanish"])
+        for i in self.getDifficulty(self.view.level):
+            for verb in self.listdata["Verbs"]:
+                if i == verb["Difficulty"]:
+                    self.vlist.append(verb["Infinitive"])
+        for i in self.getDifficulty(self.view.level):
+            for noun in self.listdata["Nouns"]:
+                if i == noun["Difficulty"]:
+                    self.nlist.append(noun["Spanish"])
 
     def getGameValues(self):
      # change later      self.lchoice = random.choice([self.vlist, self.nlist])
@@ -81,5 +86,7 @@ class Game:
             self.checkIfRight()
 
             self.view.displayResult(self.correct)
+
+            self.view.checkGameOver()
 
         self.view.whenGameOver(self.points)

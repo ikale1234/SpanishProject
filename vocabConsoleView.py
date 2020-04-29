@@ -7,6 +7,8 @@ class consoleView:
                           "That is the correct answer!", "You are good at this!", "Wow! That was cool how you got it right!"]
         self.wronglist = ["You suck! That was the wrong answer!", "How did you miss that! That was easy!",
                           "That is the wrong answer.", "That is completely incorrect!", "Are you stupid? That was wrong!"]
+        self.turns = 0
+        self.gameover = False
 
     def askDifficulty(self):
         self.level = input(
@@ -20,6 +22,7 @@ class consoleView:
     def getInput(self, english, samplelist, word):
         self.guess = input("What is the spanish word for " + english+"? \nA: " +
                            samplelist[0]+"\nB: " + samplelist[1] + "\nC: " + samplelist[2] + "\nD: " + samplelist[3] + "\nE: " + samplelist[4]+"\n\n")
+        self.turns += 1
         if word == samplelist[0]:
             self.let = "A"
         if word == samplelist[1]:
@@ -36,6 +39,10 @@ class consoleView:
             self.betweenStatements(random.choice(self.rightlist))
         else:
             self.betweenStatements(random.choice(self.wronglist))
+
+    def checkGameOver(self):
+        if self.turns == 10:
+            self.gameover == True
 
     def whenGameOver(self, points):
         print("You got", points, "/ 10 right.")

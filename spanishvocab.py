@@ -1,5 +1,5 @@
 # initialization
-from vocabConsoleView import consoleView
+from vocabGUI import consoleView
 from vocabClass import Game
 
 
