@@ -5,7 +5,7 @@ def build(dir):
     verbbank = []
     nounbank = []
     wordbank = {}
-    verbs = os.listdir(dir+"\\Verbs")
+    verbs = os.listdir(os.path.join(dir, "Verbs"))
     nouns = os.listdir(dir+"\\Nouns")
 
     #  verbs
