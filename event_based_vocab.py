@@ -7,6 +7,42 @@ from event_class import Game
 win = pyglet.window.Window(width=800, height=600)
 game = True
 
+
+class Label:
+    def __init__(self, text, size, x, y, width, height):
+        self.font = 'Times New Roman'
+        self.x = x
+        self.y = y
+        self.size = size
+        self.height = height
+        self.width = width
+        self.text = text
+        self.label = pyglet.text.Label(self.text,
+                                       font_name=self.font,
+                                       font_size=self.size,
+                                       x=self.x, y=self.y,
+                                       anchor_x='center', anchor_y='center')
+
+    def change_color(self, color):
+        self.label = pyglet.text.Label(self.text,
+                                       font_name=self.font,
+                                       font_size=self.size,
+                                       x=self.x, y=self.y,
+                                       anchor_x='center', anchor_y='center', color=color)
+
+    def in_hitbox(self, curx, cury):
+        if curx > self.x - self.width/2 and curx < self.x + self.width/2:
+            if cury > self.y - self.height/2 and cury < self.y + self.height/2:
+                return True
+            else:
+                return False
+        else:
+            return False
+
+    def draw(self):
+        self.label.draw()
+
+
 vocab_game = Game()
 while game:
     mouse_pressed = False
@@ -30,18 +66,12 @@ while game:
     numlist = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 
     gotLevel = False
-    prompt = pyglet.text.Label("What is the difficulty of words you want? Press 1 for easiest, 10 for hardest.",
-                               font_name='Times New Roman',
-                               font_size=18,
-                               x=win.width//2, y=win.height-200,
-                               anchor_x='center', anchor_y='center')
+    prompt = Label("What is the difficulty of words you want? Press 1 for easiest, 10 for hardest.",
+                   18, win.width//2, win.height-200, 1, 1)
     difflist = []
     for i in range(10):
-        difflist.append(pyglet.text.Label(numlist[i],
-                                          font_name='Times New Roman',
-                                          font_size=40,
-                                          x=100+50*i, y=win.height-400,
-                                          anchor_x='center', anchor_y='center'))
+        difflist.append(Label(numlist[i], 40,
+                              100+50*i, win.height-400, 40, 100))
     print(len(difflist))
 
     thelist = []
@@ -55,17 +85,11 @@ while game:
 
         answers = []
 
-        question = pyglet.text.Label("What is the spanish word for " + english+"?",
-                                     font_name='Times New Roman',
-                                     font_size=15,
-                                     x=win.width//2, y=win.height-100,
-                                     anchor_x='center', anchor_y='center')
+        question = Label("What is the spanish word for " +
+                         english+"?", 15, win.width//2, win.height-100, 200, 50)
 
-        data = pyglet.text.Label("# Correct: " + str(points) + "    # Wrong: "+str(count-points) + "     # Remaining:   " + str(10-count),
-                                 font_name='Times New Roman',
-                                 font_size=15,
-                                 x=win.width//2, y=win.height-50,
-                                 anchor_x='center', anchor_y='center')
+        data = Label("# Correct: " + str(points) + "    # Wrong: "+str(count-points) + "     # Remaining:   " + str(10-count), 15, win.width//2, win.height-50,
+                     150, 50)
 
         for i in range(len(samplelist)):
             if i > 3:
@@ -74,11 +98,8 @@ while game:
             else:
                 x = 1
                 a = 0
-            answers.append(pyglet.text.Label(alphabet[i] + ": " + samplelist[i],
-                                             font_name='Times New Roman',
-                                             font_size=15,
-                                             x=win.width*(x/4), y=win.height-200-50*(i)+a,
-                                             anchor_x='center', anchor_y='center'))
+            answers.append(Label(alphabet[i] + ": " + samplelist[i], 15,
+                                 win.width*(x/4), win.height-200-50*(i)+a, 200, 30))
         return question, data, answers, samplelist, let
 
     def whengameOver(points):
@@ -92,21 +113,14 @@ while game:
             state2 = "You suck, and should study more."
         else:
             state2 = "Call your local doctor to check you for a mental disability."
-        saypoints = pyglet.text.Label(state1,
-                                      font_name='Times New Roman',
-                                      font_size=20,
-                                      x=win.width//2, y=win.height-200,
-                                      anchor_x='center', anchor_y='center')
-        suggest = pyglet.text.Label(state2,
-                                    font_name='Times New Roman',
-                                    font_size=20,
-                                    x=win.width//2, y=win.height-400,
-                                    anchor_x='center', anchor_y='center')
-        playbutton = pyglet.text.Label("Play Again",
-                                       font_name='Times New Roman',
-                                       font_size=15,
-                                       x=win.width//2, y=win.height-500,
-                                       anchor_x='center', anchor_y='center')
+        saypoints = Label(state1, 20,
+                          win.width//2, win.height-200,
+                          100, 100)
+        suggest = Label(state2, 20, win.width//2, win.height-400,
+                        100, 100)
+        playbutton = Label("Play Again", 15,
+                           win.width//2, win.height-500,
+                           140, 80)
         return saypoints, suggest, playbutton
 
     def display_result(guess, let):
@@ -130,36 +144,20 @@ while game:
             y = 1
             b = 0
         if vocab_game.check_answer(guess, let):
-            answers[idx] = pyglet.text.Label(alphabet[idx] + ": " + samplelist[idx],
-                                             font_name='Times New Roman',
-                                             font_size=15,
-                                             x=win.width*(c/4), y=win.height-200-50*idx + a,
-                                             anchor_x='center', anchor_y='center', color=(0, 255, 0, 255))
+            answers[idx].change_color((0, 255, 0, 255))
             sentence = random.choice(rightlist)
             points += 1
         else:
             sentence = random.choice(wronglist)
 
-            answers[idx2] = pyglet.text.Label(alphabet[idx2] + ": " + samplelist[idx2],
-                                              font_name='Times New Roman',
-                                              font_size=15,
-                                              x=win.width*(y/4), y=win.height-200-50*idx2 + b,
-                                              anchor_x='center', anchor_y='center', color=(0, 255, 0, 255))
-            answers[idx] = pyglet.text.Label(alphabet[idx] + ": " + samplelist[idx],
-                                             font_name='Times New Roman',
-                                             font_size=15,
-                                             x=win.width*(c/4), y=win.height-200-50*idx+a,
-                                             anchor_x='center', anchor_y='center', color=(255, 0, 0, 255))
-        saying = pyglet.text.Label(sentence,
-                                   font_name='Times New Roman',
-                                   font_size=15,
-                                   x=win.width//2, y=100,
-                                   anchor_x='center', anchor_y='center')
-        tell_enter = pyglet.text.Label("Click Anywhere to Continue.",
-                                       font_name='Times New Roman',
-                                       font_size=15,
-                                       x=win.width//2, y=50,
-                                       anchor_x='center', anchor_y='center')
+            answers[idx2].change_color((0, 255, 0, 255))
+            answers[idx].change_color((255, 0, 0, 255))
+        saying = Label(sentence, 15,
+                       win.width//2, 100,
+                       100, 100)
+        tell_enter = Label("Click Anywhere to Continue.", 15,
+                           win.width//2, 50,
+                           100, 100)
         return saying, tell_enter
 
     @win.event
@@ -167,73 +165,23 @@ while game:
         global playbutton
         if stage == 1:
             for i in range(10):
-                if x > (100+50*i) - 20 and x < (100+50*i) + 20:
-                    if y > 150 and y < 250:
-                        difflist[i] = pyglet.text.Label(numlist[i],
-                                                        font_name='Times New Roman',
-                                                        font_size=40,
-                                                        x=100+50*i, y=win.height-400,
-                                                        anchor_x='center', anchor_y='center', color=(0, 0, 255, 255))
-                    else:
-                        difflist[i] = pyglet.text.Label(numlist[i],
-                                                        font_name='Times New Roman',
-                                                        font_size=40,
-                                                        x=100+50*i, y=win.height-400,
-                                                        anchor_x='center', anchor_y='center', color=(255, 255, 255, 255))
+                if difflist[i].in_hitbox(x, y):
+                    difflist[i].change_color((0, 0, 255, 255))
                 else:
-                    difflist[i] = pyglet.text.Label(numlist[i],
-                                                    font_name='Times New Roman',
-                                                    font_size=40,
-                                                    x=100+50*i, y=win.height-400,
-                                                    anchor_x='center', anchor_y='center', color=(255, 255, 255, 255))
+                    difflist[i].change_color((255, 255, 255, 255))
 
         if stage == 2:
             for i in range(len(answers)):
-                if i > 3:
-                    c = 3
-                    a = 200
+                if answers[i].in_hitbox(x, y):
+                    answers[i].change_color((0, 0, 255, 255))
                 else:
-                    c = 1
-                    a = 0
-                if x > win.width*(c/4)-100 and x < win.width*(c/4)+100:
-                    if y > (win.height-200-50*i+a) - 15 and y < (win.height-200-50*i+a) + 15:
-                        answers[i] = pyglet.text.Label(alphabet[i] + ": " + samplelist[i],
-                                                       font_name='Times New Roman',
-                                                       font_size=15,
-                                                       x=win.width*(c/4), y=win.height-200-50*i+a,
-                                                       anchor_x='center', anchor_y='center', color=(0, 0, 255, 255))
-                    else:
-                        answers[i] = pyglet.text.Label(alphabet[i] + ": " + samplelist[i],
-                                                       font_name='Times New Roman',
-                                                       font_size=15,
-                                                       x=win.width*(c/4), y=win.height-200-50*i+a,
-                                                       anchor_x='center', anchor_y='center', color=(255, 255, 255, 255))
-                else:
-                    answers[i] = pyglet.text.Label(alphabet[i] + ": " + samplelist[i],
-                                                   font_name='Times New Roman',
-                                                   font_size=15,
-                                                   x=win.width*(c/4), y=win.height-200-50*i+a,
-                                                   anchor_x='center', anchor_y='center', color=(255, 255, 255, 255))
+                    answers[i].change_color((255, 255, 255, 255))
+
         if gameOver:
-            if x > win.width//2 - 70 and x < win.width//2 + 70:
-                if y > 60 and y < 140:
-                    playbutton = pyglet.text.Label("Play Again",
-                                                   font_name='Times New Roman',
-                                                   font_size=15,
-                                                   x=win.width//2, y=win.height-500,
-                                                   anchor_x='center', anchor_y='center', color=(0, 0, 255, 255))
-                else:
-                    playbutton = pyglet.text.Label("Play Again",
-                                                   font_name='Times New Roman',
-                                                   font_size=15,
-                                                   x=win.width//2, y=win.height-500,
-                                                   anchor_x='center', anchor_y='center', color=(255, 255, 255, 255))
+            if playbutton.in_hitbox(x, y):
+                playbutton.change_color((0, 0, 255, 255))
             else:
-                playbutton = pyglet.text.Label("Play Again",
-                                               font_name='Times New Roman',
-                                               font_size=15,
-                                               x=win.width//2, y=win.height-500,
-                                               anchor_x='center', anchor_y='center', color=(255, 255, 255, 255))
+                playbutton.change_color((255, 255, 255, 255))
 
     @win.event
     def on_mouse_press(x, y, LEFT, none):
@@ -255,31 +203,24 @@ while game:
 
                 for i in range(10):
 
-                    if x > (100+50*i) - 25 and x < (100+50*i) + 25:
-                        if y > 150 and y < 250:
-                            level = int(numlist[i])
-                            vocab_game.get_difficulty(level)
-                            question, data, answers, samplelist, let = stage2(
-                                level)
+                    if difflist[i].in_hitbox(x, y):
+                        level = int(numlist[i])
+                        vocab_game.get_difficulty(level)
+                        question, data, answers, samplelist, let = stage2(
+                            level)
 
-                            stage = 2
+                        stage = 2
         print(mouse_pressed)
         if stage == 2:
             if mouse_pressed:
                 mouse_pressed = False
                 mouse_released = True
                 for i in range(len(answers)):
-                    if i > 3:
-                        c = 3
-                        a = 200
-                    else:
-                        c = 1
-                        a = 0
-                    if x > win.width*(c/4)-100 and x < win.width*(c/4)+100:
-                        if y > (win.height-200-50*i+a) - 15 and y < (win.height-200-50*i+a) + 15:
-                            guess = alphabet[i]
-                            saying, tell_enter = display_result(guess, let)
-                            stage = 3
+
+                    if answers[i].in_hitbox(x, y):
+                        guess = alphabet[i]
+                        saying, tell_enter = display_result(guess, let)
+                        stage = 3
         if stage == 3:
             if mouse_pressed:
                 mouse_pressed = False
@@ -298,9 +239,8 @@ while game:
                 mouse_pressed = False
                 mouse_released = True
 
-                if x > win.width//2 - 70 and x < win.width//2 + 70:
-                    if y > 60 and y < 140:
-                        pyglet.app.exit()
+                if playbutton.in_hitbox(x, y):
+                    pyglet.app.exit()
 
     @win.event
     def on_draw():
