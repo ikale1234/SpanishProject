@@ -44,227 +44,224 @@ class Label:
 
 
 vocab_game = Game()
-while game:
-    mouse_pressed = False
-    level = 0
-    gotLevel = False
-    mouse_released = True
-    stage = 1
-    points = 0
-    alphabet = ["A", "B", "C", "D", "E", "F", "G", "H"]
-    rightlist = ["Good Job! You got it right!", "Nice! That's right!",
-                 "That is the correct answer!", "You are good at this!", "Wow! That was cool how you got it right!"]
-    wronglist = ["You suck! That was the wrong answer!",
-                 "How did you miss that! That was easy!",
-                 "That is the wrong answer.", "That is completely incorrect!", "Are you stupid? That was wrong!"]
-    count = 0
-    gameOver = False
+mouse_pressed = False
+level = 0
+gotLevel = False
+mouse_released = True
+stage = 1
+points = 0
+alphabet = ["A", "B", "C", "D", "E", "F", "G", "H"]
+rightlist = ["Good Job! You got it right!", "Nice! That's right!",
+             "That is the correct answer!", "You are good at this!", "Wow! That was cool how you got it right!"]
+wronglist = ["You suck! That was the wrong answer!",
+             "How did you miss that! That was easy!",
+             "That is the wrong answer.", "That is completely incorrect!", "Are you stupid? That was wrong!"]
+count = 0
+gameOver = False
 
-    vocab_game.get_list()
+vocab_game.get_list()
 
-    gotAnswer = False
-    numlist = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+gotAnswer = False
+numlist = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 
-    gotLevel = False
-    prompt = Label("What is the difficulty of words you want? Press 1 for easiest, 10 for hardest.",
-                   18, win.width//2, win.height-200, 1, 1)
-    difflist = []
-    for i in range(10):
-        difflist.append(Label(numlist[i], 40,
-                              100+50*i, win.height-400, 40, 100))
-    print(len(difflist))
+gotLevel = False
+prompt = Label("What is the difficulty of words you want? Press 1 for easiest, 10 for hardest.",
+               18, win.width//2, win.height-200, 1, 1)
+difflist = []
+for i in range(10):
+    difflist.append(Label(numlist[i], 40,
+                          100+50*i, win.height-400, 40, 100))
+print(len(difflist))
 
-    thelist = []
+thelist = []
 
-    def stage2(level):
 
-        english, word, samplelist = vocab_game.getChoices()
-        for i in range(len(samplelist)):
-            if word == samplelist[i]:
-                let = alphabet[i]
+def stage2(level):
 
-        answers = []
+    english, word, samplelist = vocab_game.getChoices()
+    for i in range(len(samplelist)):
+        if word == samplelist[i]:
+            let = alphabet[i]
 
-        question = Label("What is the spanish word for " +
-                         english+"?", 15, win.width//2, win.height-100, 200, 50)
+    answers = []
 
-        data = Label("# Correct: " + str(points) + "    # Wrong: "+str(count-points) + "     # Remaining:   " + str(10-count), 15, win.width//2, win.height-50,
-                     150, 50)
+    question = Label("What is the spanish word for " +
+                     english+"?", 15, win.width//2, win.height-100, 200, 50)
 
-        for i in range(len(samplelist)):
-            if i > 3:
-                x = 3
-                a = 200
-            else:
-                x = 1
-                a = 0
-            answers.append(Label(alphabet[i] + ": " + samplelist[i], 15,
-                                 win.width*(x/4), win.height-200-50*(i)+a, 200, 30))
-        return question, data, answers, samplelist, let
+    data = Label("# Correct: " + str(points) + "    # Wrong: "+str(count-points) + "     # Remaining:   " + str(10-count), 15, win.width//2, win.height-50,
+                 150, 50)
 
-    def whengameOver(points):
-
-        state1 = "You got" + str(points) + "/ 10 right."
-        if points == 10:
-            state2 = "Good Job! You are great at this."
-        elif points > 7:
-            state2 = "You did good but it could be better."
-        elif points > 3:
-            state2 = "You suck, and should study more."
-        else:
-            state2 = "Call your local doctor to check you for a mental disability."
-        saypoints = Label(state1, 20,
-                          win.width//2, win.height-200,
-                          100, 100)
-        suggest = Label(state2, 20, win.width//2, win.height-400,
-                        100, 100)
-        playbutton = Label("Play Again", 15,
-                           win.width//2, win.height-500,
-                           140, 80)
-        return saypoints, suggest, playbutton
-
-    def display_result(guess, let):
-        global points, answers
-        for i in range(len(alphabet)):
-            if guess == alphabet[i]:
-                idx = i
-        for j in range(len(alphabet)):
-            if let == alphabet[j]:
-                idx2 = j
-        if idx > 3:
-            c = 3
+    for i in range(len(samplelist)):
+        if i > 3:
+            x = 3
             a = 200
         else:
-            c = 1
+            x = 1
             a = 0
-        if idx2 > 3:
-            y = 3
-            b = 200
-        else:
-            y = 1
-            b = 0
-        if vocab_game.check_answer(guess, let):
-            answers[idx].change_color((0, 255, 0, 255))
-            sentence = random.choice(rightlist)
-            points += 1
-        else:
-            sentence = random.choice(wronglist)
+        answers.append(Label(alphabet[i] + ": " + samplelist[i], 15,
+                             win.width*(x/4), win.height-200-50*(i)+a, 200, 30))
+    return question, data, answers, samplelist, let
 
-            answers[idx2].change_color((0, 255, 0, 255))
-            answers[idx].change_color((255, 0, 0, 255))
-        saying = Label(sentence, 15,
-                       win.width//2, 100,
+
+def whengameOver(points):
+
+    state1 = "You got" + str(points) + "/ 10 right."
+    if points == 10:
+        state2 = "Good Job! You are great at this."
+    elif points > 7:
+        state2 = "You did good but it could be better."
+    elif points > 3:
+        state2 = "You suck, and should study more."
+    else:
+        state2 = "Call your local doctor to check you for a mental disability."
+    saypoints = Label(state1, 20,
+                      win.width//2, win.height-200,
+                      100, 100)
+    suggest = Label(state2, 20, win.width//2, win.height-400,
+                    100, 100)
+    playbutton = Label("Play Again", 15,
+                       win.width//2, win.height-500,
+                       140, 80)
+    return saypoints, suggest, playbutton
+
+
+def display_result(guess, let):
+    global points, answers
+    for i in range(len(alphabet)):
+        if guess == alphabet[i]:
+            idx = i
+    for j in range(len(alphabet)):
+        if let == alphabet[j]:
+            idx2 = j
+    if vocab_game.check_answer(guess, let):
+        answers[idx].change_color((0, 255, 0, 255))
+        sentence = random.choice(rightlist)
+        points += 1
+    else:
+        sentence = random.choice(wronglist)
+
+        answers[idx2].change_color((0, 255, 0, 255))
+        answers[idx].change_color((255, 0, 0, 255))
+    saying = Label(sentence, 15,
+                   win.width//2, 100,
+                   100, 100)
+    tell_enter = Label("Click Anywhere to Continue.", 15,
+                       win.width//2, 50,
                        100, 100)
-        tell_enter = Label("Click Anywhere to Continue.", 15,
-                           win.width//2, 50,
-                           100, 100)
-        return saying, tell_enter
+    return saying, tell_enter
 
-    @win.event
-    def on_mouse_motion(x, y, dx, dy):
-        global playbutton
-        if stage == 1:
-            for i in range(10):
-                if difflist[i].in_hitbox(x, y):
-                    difflist[i].change_color((0, 0, 255, 255))
-                else:
-                    difflist[i].change_color((255, 255, 255, 255))
 
-        if stage == 2:
-            for i in range(len(answers)):
-                if answers[i].in_hitbox(x, y):
-                    answers[i].change_color((0, 0, 255, 255))
-                else:
-                    answers[i].change_color((255, 255, 255, 255))
-
-        if gameOver:
-            if playbutton.in_hitbox(x, y):
-                playbutton.change_color((0, 0, 255, 255))
+@win.event
+def on_mouse_motion(x, y, dx, dy):
+    global playbutton
+    if stage == 1:
+        for i in range(10):
+            if difflist[i].in_hitbox(x, y):
+                difflist[i].change_color((0, 0, 255, 255))
             else:
-                playbutton.change_color((255, 255, 255, 255))
+                difflist[i].change_color((255, 255, 255, 255))
 
-    @win.event
-    def on_mouse_press(x, y, LEFT, none):
-        global mouse_pressed, mouse_released
-        print(mouse_released)
-        if mouse_released:
+    if stage == 2:
+        for i in range(len(answers)):
+            if answers[i].in_hitbox(x, y):
+                answers[i].change_color((0, 0, 255, 255))
+            else:
+                answers[i].change_color((255, 255, 255, 255))
 
-            mouse_pressed = True
-            mouse_released = False
+    if gameOver:
+        if playbutton.in_hitbox(x, y):
+            playbutton.change_color((0, 0, 255, 255))
+        else:
+            playbutton.change_color((255, 255, 255, 255))
 
-    @win.event
-    def on_mouse_release(x, y, LEFT, none):
-        global mouse_released, level, mouse_pressed, stage, question, data, answers, guess, samplelist, let, count, gameOver, saypoints, suggest, playbutton, saying, tell_enter
 
-        if stage == 1:
-            if mouse_pressed:
-                mouse_pressed = False
-                mouse_released = True
+@win.event
+def on_mouse_press(x, y, LEFT, none):
+    global mouse_pressed, mouse_released
+    if mouse_released:
 
-                for i in range(10):
+        mouse_pressed = True
+        mouse_released = False
 
-                    if difflist[i].in_hitbox(x, y):
-                        level = int(numlist[i])
-                        vocab_game.get_difficulty(level)
-                        question, data, answers, samplelist, let = stage2(
-                            level)
 
-                        stage = 2
-        print(mouse_pressed)
-        if stage == 2:
-            if mouse_pressed:
-                mouse_pressed = False
-                mouse_released = True
-                for i in range(len(answers)):
+@win.event
+def on_mouse_release(x, y, LEFT, none):
+    global mouse_released, level, mouse_pressed, stage, question, data, answers, guess, samplelist, let, count, gameOver, saypoints, suggest, playbutton, saying, tell_enter, points
 
-                    if answers[i].in_hitbox(x, y):
-                        guess = alphabet[i]
-                        saying, tell_enter = display_result(guess, let)
-                        stage = 3
-        if stage == 3:
-            if mouse_pressed:
-                mouse_pressed = False
-                mouse_released = True
-                count += 1
-                if count >= 10:
+    if stage == 1:
+        if mouse_pressed:
+            mouse_pressed = False
+            mouse_released = True
 
-                    saypoints, suggest, playbutton = whengameOver(points)
-                    gameOver = True
-                else:
-                    stage = 2
+            for i in range(10):
+
+                if difflist[i].in_hitbox(x, y):
+                    level = int(numlist[i])
+                    vocab_game.get_difficulty(level)
                     question, data, answers, samplelist, let = stage2(
                         level)
-        if gameOver:
-            if mouse_pressed:
-                mouse_pressed = False
-                mouse_released = True
 
-                if playbutton.in_hitbox(x, y):
-                    pyglet.app.exit()
+                    stage = 2
+    if stage == 2:
+        if mouse_pressed:
+            mouse_pressed = False
+            mouse_released = True
+            for i in range(len(answers)):
 
-    @win.event
-    def on_draw():
-        win.clear()
-        if gameOver == False:
-            if stage == 1:
-                prompt.draw()
-                for i in difflist:
-                    i.draw()
-            if stage == 2 or stage == 3:
-                question.draw()
-                for i in answers:
-                    i.draw()
-                data.draw()
-            if stage == 3:
-                saying.draw()
-                tell_enter.draw()
-        if gameOver:
-            saypoints.draw()
-            suggest.draw()
-            playbutton.draw()
+                if answers[i].in_hitbox(x, y):
+                    guess = alphabet[i]
+                    saying, tell_enter = display_result(guess, let)
+                    stage = 3
+    if stage == 3:
+        if mouse_pressed:
+            mouse_pressed = False
+            mouse_released = True
+            count += 1
+            if count >= 10:
 
-    @win.event
-    def on_window_close(window):
-        exit()
+                saypoints, suggest, playbutton = whengameOver(points)
+                gameOver = True
+            else:
+                stage = 2
+                question, data, answers, samplelist, let = stage2(
+                    level)
+    if gameOver:
+        mouse_pressed = False
+        mouse_released = True
 
-    pyglet.app.run()
+        if playbutton.in_hitbox(x, y):
+            gameOver = False
+            stage = 1
+            points = 0
+            count = 0
+
+
+
+@win.event
+def on_draw():
+    win.clear()
+    if gameOver == False:
+        if stage == 1:
+            prompt.draw()
+            for i in difflist:
+                i.draw()
+        if stage == 2 or stage == 3:
+            question.draw()
+            for i in answers:
+                i.draw()
+            data.draw()
+        if stage == 3:
+            saying.draw()
+            tell_enter.draw()
+    if gameOver:
+        saypoints.draw()
+        suggest.draw()
+        playbutton.draw()
+
+
+@win.event
+def on_window_close(window):
+    exit()
+
+
+pyglet.app.run()
