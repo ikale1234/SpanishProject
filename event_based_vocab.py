@@ -70,7 +70,7 @@ prompt = Label("What is the difficulty of words you want? Press 1 for easiest, 1
 difflist = []
 for i in range(10):
     difflist.append(Label(numlist[i], 40,
-                          100+50*i, win.height-400, 40, 100))
+                          150+50*i, win.height-400, 40, 60))
 print(len(difflist))
 
 thelist = []
@@ -99,7 +99,7 @@ def stage2(level):
             x = 1
             a = 0
         answers.append(Label(alphabet[i] + ": " + samplelist[i], 15,
-                             win.width*(x/4), win.height-200-50*(i)+a, 200, 30))
+                             win.width*(x/4), win.height-225-50*(i)+a, 200, 30))
     return question, data, answers, samplelist, let
 
 
@@ -120,9 +120,12 @@ def whengameOver(points):
     suggest = Label(state2, 20, win.width//2, win.height-400,
                     100, 100)
     playbutton = Label("Play Again", 15,
-                       win.width//2, win.height-500,
+                       win.width*(3/4), win.height-500,
                        140, 80)
-    return saypoints, suggest, playbutton
+    quitbutton = Label("Quit", 15,
+                       win.width*(1/4), win.height-500,
+                       140, 80)
+    return saypoints, suggest, playbutton, quitbutton
 
 
 def display_result(guess, let):
@@ -173,6 +176,10 @@ def on_mouse_motion(x, y, dx, dy):
             playbutton.change_color((0, 0, 255, 255))
         else:
             playbutton.change_color((255, 255, 255, 255))
+        if quitbutton.in_hitbox(x, y):
+            quitbutton.change_color((0, 0, 255, 255))
+        else:
+            quitbutton.change_color((255, 255, 255, 255))
 
 
 @win.event
@@ -186,7 +193,7 @@ def on_mouse_press(x, y, LEFT, none):
 
 @win.event
 def on_mouse_release(x, y, LEFT, none):
-    global mouse_released, level, mouse_pressed, stage, question, data, answers, guess, samplelist, let, count, gameOver, saypoints, suggest, playbutton, saying, tell_enter, points
+    global quitbutton, mouse_released, level, mouse_pressed, stage, question, data, answers, guess, samplelist, let, count, gameOver, saypoints, suggest, playbutton, saying, tell_enter, points
 
     if stage == 1:
         if mouse_pressed:
@@ -219,7 +226,8 @@ def on_mouse_release(x, y, LEFT, none):
             count += 1
             if count >= 10:
 
-                saypoints, suggest, playbutton = whengameOver(points)
+                saypoints, suggest, playbutton, quitbutton = whengameOver(
+                    points)
                 gameOver = True
             else:
                 stage = 2
@@ -234,7 +242,9 @@ def on_mouse_release(x, y, LEFT, none):
             stage = 1
             points = 0
             count = 0
-
+        if quitbutton.in_hitbox(x, y):
+            pyglet.app.exit()
+            exit()
 
 
 @win.event
@@ -257,6 +267,7 @@ def on_draw():
         saypoints.draw()
         suggest.draw()
         playbutton.draw()
+        quitbutton.draw()
 
 
 @win.event
