@@ -23,12 +23,26 @@ class Label:
                                        x=self.x, y=self.y,
                                        anchor_x='center', anchor_y='center')
 
-    def change_color(self, color):
+        self.pattern = pyglet.image.SolidColorImagePattern(color=(0, 0, 0, 0))
+        self.image = self.pattern.create_image(self.width, self.height)
+
+    def draw_rect(self, color):
+        self.pattern = pyglet.image.SolidColorImagePattern(color=color)
+        self.image = self.pattern.create_image(self.width, self.height)
+
+    def change_color(self, color, bold):
         self.label = pyglet.text.Label(self.text,
                                        font_name=self.font,
                                        font_size=self.size,
                                        x=self.x, y=self.y,
-                                       anchor_x='center', anchor_y='center', color=color)
+                                       anchor_x='center', anchor_y='center', color=color, bold=bold)
+
+    def change_background_color(self, color, bold):
+        self.label = pyglet.text.Label(self.text,
+                                       font_name=self.font,
+                                       font_size=self.size,
+                                       x=self.x, y=self.y,
+                                       anchor_x='center', anchor_y='center', background_color=color, bold=bold)
 
     def in_hitbox(self, curx, cury):
         if curx > self.x - self.width/2 and curx < self.x + self.width/2:
@@ -40,6 +54,7 @@ class Label:
             return False
 
     def draw(self):
+        self.image.blit(self.x-self.width/2, self.y-self.height/2)
         self.label.draw()
 
 
@@ -137,16 +152,16 @@ def display_result(guess, let):
         if let == alphabet[j]:
             idx2 = j
     if vocab_game.check_answer(guess, let):
-        answers[idx].change_color((0, 255, 0, 255))
+        answers[idx].change_color((0, 255, 0, 255), False)
         sentence = random.choice(rightlist)
         points += 1
     else:
         sentence = random.choice(wronglist)
 
-        answers[idx2].change_color((0, 255, 0, 255))
-        answers[idx].change_color((255, 0, 0, 255))
+        answers[idx2].change_color((0, 255, 0, 255), False)
+        answers[idx].change_color((255, 0, 0, 255), False)
     saying = Label(sentence, 15,
-                   win.width//2, 100,
+                   win.width//2, 150,
                    100, 100)
     tell_enter = Label("Click Anywhere to Continue.", 15,
                        win.width//2, 50,
@@ -160,26 +175,26 @@ def on_mouse_motion(x, y, dx, dy):
     if stage == 1:
         for i in range(10):
             if difflist[i].in_hitbox(x, y):
-                difflist[i].change_color((0, 0, 255, 255))
+                difflist[i].draw_rect((0, 0, 255, 255))
             else:
-                difflist[i].change_color((255, 255, 255, 255))
+                difflist[i].draw_rect((0, 0, 0, 0))
 
     if stage == 2:
         for i in range(len(answers)):
             if answers[i].in_hitbox(x, y):
-                answers[i].change_color((0, 0, 255, 255))
+                answers[i].draw_rect((0, 0, 255, 255))
             else:
-                answers[i].change_color((255, 255, 255, 255))
+                answers[i].draw_rect((0, 0, 0, 0))
 
     if gameOver:
         if playbutton.in_hitbox(x, y):
-            playbutton.change_color((0, 0, 255, 255))
+            playbutton.draw_rect((0, 0, 255, 255))
         else:
-            playbutton.change_color((255, 255, 255, 255))
+            playbutton.draw_rect((0, 0, 0, 0))
         if quitbutton.in_hitbox(x, y):
-            quitbutton.change_color((0, 0, 255, 255))
+            quitbutton.draw_rect((0, 0, 255, 255))
         else:
-            quitbutton.change_color((255, 255, 255, 255))
+            quitbutton.draw_rect((0, 0, 0, 0))
 
 
 @win.event
