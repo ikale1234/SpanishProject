@@ -100,8 +100,7 @@ def stage2(level):
 
     answers = []
 
-    question = Label("What is the spanish word for " +
-                     english+"?", 15, win.width//2, win.height-100, 200, 50)
+    question = Label(english, 15, win.width//2, win.height-100, 200, 50)
 
     data = Label("# Correct: " + str(points) + "    # Wrong: "+str(count-points) + "     # Remaining:   " + str(10-count), 15, win.width//2, win.height-50,
                  150, 50)

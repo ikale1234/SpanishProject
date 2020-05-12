@@ -6,11 +6,12 @@ def build(dir):
     nounbank = []
     wordbank = {}
     verbs = os.listdir(os.path.join(dir, "Verbs"))
-    nouns = os.listdir(dir+"\\Nouns")
+    nouns = os.listdir(os.path.join(dir, "Nouns"))
 
     #  verbs
     for i in range(len(verbs)):
-        curfile = open(dir+"\\Verbs\\"+verbs[i], "r", encoding="ISO-8859-1")
+        curfile = open(os.path.join(
+            os.path.join(dir, "Verbs"), verbs[i]), "r", encoding="ISO-8859-1")
         pol = []
         templist = {}
         for j in range(6):
@@ -43,7 +44,8 @@ def build(dir):
 
     # nouns
     for i in range(len(nouns)):
-        curfile = open(dir+"\\Nouns\\"+nouns[i], "r", encoding="utf-8")
+        curfile = open(os.path.join(
+            os.path.join(dir, "Nouns"), nouns[i]), "r", encoding="utf-8")
         templist = {}
         x = curfile.readline()
         y = curfile.readline()
