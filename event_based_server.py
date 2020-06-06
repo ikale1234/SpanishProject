@@ -2,12 +2,13 @@ import os
 import random
 import verborganizer
 import sys
+import socket
+import pickle
 
 
 class Game:
     def __init__(self):
-        self.vlist = []
-        self.nlist = []
+
         self.listdata = []
         self.thelist = []
         if len(sys.argv) == 1:
@@ -18,6 +19,8 @@ class Game:
             except FileNotFoundError:
                 print("That is an invalid directory.")
                 quit()
+        self.vlist = []
+        self.nlist = []
 
     def getChoices(self):
         # change later      lchoice = random.choice([vlist, nlist])
@@ -35,7 +38,13 @@ class Game:
             for noun in self.listdata["Nouns"]:
                 if self.word == noun["Spanish"]:
                     self.english = noun["English"]
-        return self.english, self.word, self.samplelist
+        print(self.lchoice)
+        self.data = []
+        self.data.append(self.english)
+        self.data.append(self.word)
+        self.data.append(self.samplelist)
+
+        return self.data
 
     def get_difficulty(self, level):
 
@@ -57,3 +66,28 @@ class Game:
         else:
             self.right = False
         return self.right
+
+
+game = Game()
+host = '127.0.0.1'
+port = 2004
+x = 1
+levels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s.bind((host, port))
+    s.listen()
+    conn, addr = s.accept()
+    with conn:
+        print('Connected by', addr)
+        while True:
+            data = conn.recv(1024)
+            try:
+                getq = pickle.loads(data)
+                if getq == "gq":
+                    gamedata = game.getChoices()
+                    gd = pickle.dumps(gamedata)
+                    conn.sendall(gd)
+                if getq in levels:
+                    game.get_difficulty(getq)
+            except EOFError:
+                continue

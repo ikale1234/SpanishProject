@@ -4,8 +4,14 @@ import verborganizer
 import sys
 import pyglet
 from event_class import Game
+import socket
+import pickle
 win = pyglet.window.Window(width=800, height=600)
 game = True
+
+wordlist = []
+HOST = '127.0.0.1'  # The server's hostname or IP address
+PORT = 2004      # The port used by the server
 
 
 class Label:
@@ -74,8 +80,6 @@ wronglist = ["You suck! That was the wrong answer!",
 count = 0
 gameOver = False
 
-vocab_game.get_list()
-
 gotAnswer = False
 numlist = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 
@@ -93,7 +97,17 @@ thelist = []
 
 def stage2(level):
 
-    english, word, samplelist = vocab_game.getChoices()
+    servsend = pickle.dumps('gq')
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((HOST, PORT))
+        s.send(servsend)
+        data = s.recv(1024)
+        gamedata = pickle.loads(data)
+        gamedata[0] = english
+        gamedata[1] = word
+        gamedata[2] = samplelist
+        servsend = pickle.dumps(0)
+    #    english, word, samplelist = vocab_game.getChoices()
     for i in range(len(samplelist)):
         if word == samplelist[i]:
             let = alphabet[i]
@@ -218,7 +232,11 @@ def on_mouse_release(x, y, LEFT, none):
 
                 if difflist[i].in_hitbox(x, y):
                     level = int(numlist[i])
-                    vocab_game.get_difficulty(level)
+                    servs = pickle.dumps(level)
+                    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                        s.connect((HOST, PORT))
+                        s.send(servs)
+                        s.close()
                     question, data, answers, samplelist, let = stage2(
                         level)
 
