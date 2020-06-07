@@ -38,8 +38,9 @@ class Game:
             for noun in self.listdata["Nouns"]:
                 if self.word == noun["Spanish"]:
                     self.english = noun["English"]
-        print(self.lchoice)
         self.data = []
+        print(self.english)
+        print(self.samplelist)
         self.data.append(self.english)
         self.data.append(self.word)
         self.data.append(self.samplelist)
@@ -70,24 +71,21 @@ class Game:
 
 game = Game()
 host = '127.0.0.1'
-port = 2004
+port = 20012
 x = 1
 levels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((host, port))
-    s.listen()
-    conn, addr = s.accept()
-    with conn:
-        print('Connected by', addr)
-        while True:
+    while True:
+        s.listen()
+        conn, addr = s.accept()
+        with conn:
+            print('Connected by', addr)
             data = conn.recv(1024)
-            try:
-                getq = pickle.loads(data)
-                if getq == "gq":
-                    gamedata = game.getChoices()
-                    gd = pickle.dumps(gamedata)
-                    conn.sendall(gd)
-                if getq in levels:
-                    game.get_difficulty(getq)
-            except EOFError:
-                continue
+            getq = pickle.loads(data)
+            if getq == "gq":
+                gamedata = game.getChoices()
+                gd = pickle.dumps(gamedata)
+                conn.send(gd)
+            if getq in levels:
+                game.get_difficulty(getq)

@@ -1,17 +1,12 @@
+
 import os
 import random
 import verborganizer
 import sys
 import pyglet
-from event_class import Game
-import socket
-import pickle
+from event_client import Game
 win = pyglet.window.Window(width=800, height=600)
 game = True
-
-wordlist = []
-HOST = '127.0.0.1'  # The server's hostname or IP address
-PORT = 2004      # The port used by the server
 
 
 class Label:
@@ -28,7 +23,6 @@ class Label:
                                        font_size=self.size,
                                        x=self.x, y=self.y,
                                        anchor_x='center', anchor_y='center')
-
         self.pattern = pyglet.image.SolidColorImagePattern(color=(0, 0, 0, 0))
         self.image = self.pattern.create_image(self.width, self.height)
 
@@ -79,10 +73,8 @@ wronglist = ["You suck! That was the wrong answer!",
              "That is the wrong answer.", "That is completely incorrect!", "Are you stupid? That was wrong!"]
 count = 0
 gameOver = False
-
 gotAnswer = False
 numlist = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-
 gotLevel = False
 prompt = Label("What is the difficulty of words you want? Press 1 for easiest, 10 for hardest.",
                18, win.width//2, win.height-200, 1, 1)
@@ -91,34 +83,24 @@ for i in range(10):
     difflist.append(Label(numlist[i], 40,
                           150+50*i, win.height-400, 40, 60))
 print(len(difflist))
-
 thelist = []
 
 
 def stage2(level):
+    english, word, samplelist = vocab_game.getChoices()
 
-    servsend = pickle.dumps('gq')
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((HOST, PORT))
-        s.send(servsend)
-        data = s.recv(1024)
-        gamedata = pickle.loads(data)
-        gamedata[0] = english
-        gamedata[1] = word
-        gamedata[2] = samplelist
-        servsend = pickle.dumps(0)
-    #    english, word, samplelist = vocab_game.getChoices()
     for i in range(len(samplelist)):
         if word == samplelist[i]:
             let = alphabet[i]
 
     answers = []
 
+    question = Label("What is the spanish word for " +
+                     english+"?", 15, win.width//2, win.height-100, 200, 50)
     question = Label(english, 15, win.width//2, win.height-100, 200, 50)
 
     data = Label("# Correct: " + str(points) + "    # Wrong: "+str(count-points) + "     # Remaining:   " + str(10-count), 15, win.width//2, win.height-50,
                  150, 50)
-
     for i in range(len(samplelist)):
         if i > 3:
             x = 3
@@ -132,7 +114,6 @@ def stage2(level):
 
 
 def whengameOver(points):
-
     state1 = "You got" + str(points) + "/ 10 right."
     if points == 10:
         state2 = "Good Job! You are great at this."
@@ -170,7 +151,6 @@ def display_result(guess, let):
         points += 1
     else:
         sentence = random.choice(wronglist)
-
         answers[idx2].change_color((0, 255, 0, 255), False)
         answers[idx].change_color((255, 0, 0, 255), False)
     saying = Label(sentence, 15,
@@ -191,14 +171,12 @@ def on_mouse_motion(x, y, dx, dy):
                 difflist[i].draw_rect((0, 0, 255, 255))
             else:
                 difflist[i].draw_rect((0, 0, 0, 0))
-
     if stage == 2:
         for i in range(len(answers)):
             if answers[i].in_hitbox(x, y):
                 answers[i].draw_rect((0, 0, 255, 255))
             else:
                 answers[i].draw_rect((0, 0, 0, 0))
-
     if gameOver:
         if playbutton.in_hitbox(x, y):
             playbutton.draw_rect((0, 0, 255, 255))
@@ -214,7 +192,6 @@ def on_mouse_motion(x, y, dx, dy):
 def on_mouse_press(x, y, LEFT, none):
     global mouse_pressed, mouse_released
     if mouse_released:
-
         mouse_pressed = True
         mouse_released = False
 
@@ -222,31 +199,22 @@ def on_mouse_press(x, y, LEFT, none):
 @win.event
 def on_mouse_release(x, y, LEFT, none):
     global quitbutton, mouse_released, level, mouse_pressed, stage, question, data, answers, guess, samplelist, let, count, gameOver, saypoints, suggest, playbutton, saying, tell_enter, points
-
     if stage == 1:
         if mouse_pressed:
             mouse_pressed = False
             mouse_released = True
-
             for i in range(10):
-
                 if difflist[i].in_hitbox(x, y):
                     level = int(numlist[i])
-                    servs = pickle.dumps(level)
-                    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                        s.connect((HOST, PORT))
-                        s.send(servs)
-                        s.close()
+                    vocab_game.get_difficulty(level)
                     question, data, answers, samplelist, let = stage2(
                         level)
-
                     stage = 2
     if stage == 2:
         if mouse_pressed:
             mouse_pressed = False
             mouse_released = True
             for i in range(len(answers)):
-
                 if answers[i].in_hitbox(x, y):
                     guess = alphabet[i]
                     saying, tell_enter = display_result(guess, let)
@@ -257,7 +225,6 @@ def on_mouse_release(x, y, LEFT, none):
             mouse_released = True
             count += 1
             if count >= 10:
-
                 saypoints, suggest, playbutton, quitbutton = whengameOver(
                     points)
                 gameOver = True
@@ -268,7 +235,6 @@ def on_mouse_release(x, y, LEFT, none):
     if gameOver:
         mouse_pressed = False
         mouse_released = True
-
         if playbutton.in_hitbox(x, y):
             gameOver = False
             stage = 1
