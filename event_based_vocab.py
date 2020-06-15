@@ -169,9 +169,10 @@ def display_result(guess):
 
 @win.event
 def on_mouse_motion(x, y, dx, dy):
-    global playbutton, stage, question, data, answers, samplelist, needed
+    global playbutton, stage, question, data, answers, samplelist, needed, points, count
     if stage == 0:
         needed = vocab_game.stage0()
+        points, count = vocab_game.get_score()
         question, data, answers, samplelist = stage2()
         stage = 2
     if stage == 1:

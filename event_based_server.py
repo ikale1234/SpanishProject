@@ -70,7 +70,7 @@ class Game:
 
 
 host = '127.0.0.1'
-port = 20011
+port = 2020
 x = 1
 running = True
 count = 0
@@ -78,46 +78,54 @@ options = [1, 2, 3, 4, 5, 6, 7, 8]
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((host, port))
     while True:
-        s.listen()
-        conn, addr = s.accept()
-        with conn:
-            print('Connected by', addr)
-            data = conn.recv(1024)
-            getq = pickle.loads(data)
-            if count == 0:
-                name = getq
-                game = Game()
-                game.get_difficulty(1)
-                count += 1
-                end = 0
-                points = 10
-                conn.send(pickle.dumps(points))
-            if count != 0:
-                if getq == "gq":
-                    gamedata = game.getChoices()
-                    gd = pickle.dumps(gamedata)
-                    conn.send(gd)
-                elif getq in options:
-                    if game.samplelist[getq] == game.word:
-                        val = 1
-                        game.numright += 1
-                    else:
-                        val = 0
-                    game.numdone += 1
-                    if game.numdone == points:
-                        end = 1
-
-                    values = [val, end, game.numright, game.numdone, game.word]
-                    lis = pickle.dumps(values)
-                    conn.send(lis)
-                elif getq != name:
-                    game = Game()
+        try:
+            s.listen()
+            conn, addr = s.accept()
+            with conn:
+                print('Connected by', addr)
+                data = conn.recv(1024)
+                getq = pickle.loads(data)
+                if count == 0:
                     name = getq
+                    game = Game()
                     game.get_difficulty(1)
-
+                    count += 1
                     end = 0
                     points = 10
                     conn.send(pickle.dumps(points))
-                else:
-                    points = 10
-                    conn.send(pickle.dumps(points))
+                if count != 0:
+                    if getq == 35:
+                        vals = [game.numright, game.numdone]
+                        thing = pickle.dumps(vals)
+                        conn.send(thing)
+                    if getq == "gq":
+                        gamedata = game.getChoices()
+                        gd = pickle.dumps(gamedata)
+                        conn.send(gd)
+                    elif getq in options:
+                        if game.samplelist[getq] == game.word:
+                            val = 1
+                            game.numright += 1
+                        else:
+                            val = 0
+                        game.numdone += 1
+                        if game.numdone == points:
+                            end = 1
+
+                        values = [val, end, game.numright,
+                                  game.numdone, game.word]
+                        lis = pickle.dumps(values)
+                        conn.send(lis)
+                    elif getq != name:
+                        game = Game()
+                        name = getq
+                        game.get_difficulty(1)
+
+                        end = 0
+                        points = 10
+                        conn.send(pickle.dumps(points))
+                    else:
+                        points = 10
+                        conn.send(pickle.dumps(points))
+        except KeyboardInterrupt:
+            break

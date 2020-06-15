@@ -9,7 +9,18 @@ import pickle
 class Game:
     def __init__(self):
         self.HOST = '127.0.0.1'  # The server's hostname or IP address
-        self.PORT = 20011      # The port used by the server
+        self.PORT = 2020    # The port used by the server
+
+    def get_score(self):
+        self.servsend = pickle.dumps(35)
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((self.HOST, self.PORT))
+            s.send(self.servsend)
+            self.data = s.recv(1024)
+            self.data = pickle.loads(self.data)
+            self.right = self.data[0]
+            self.done = self.data[1]
+        return self.right, self.done
 
     def getChoices(self):
         self.servsend = pickle.dumps("gq")
