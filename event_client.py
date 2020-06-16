@@ -12,7 +12,8 @@ class Game:
         self.PORT = 2020    # The port used by the server
 
     def get_score(self):
-        self.servsend = pickle.dumps(35)
+        self.listsend = self.listsend = [35, self.token]
+        self.servsend = pickle.dumps(self.listsend)
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((self.HOST, self.PORT))
             s.send(self.servsend)
@@ -23,7 +24,8 @@ class Game:
         return self.right, self.done
 
     def getChoices(self):
-        self.servsend = pickle.dumps("gq")
+        self.listsend = self.listsend = ["gq", self.token]
+        self.servsend = pickle.dumps(self.listsend)
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((self.HOST, self.PORT))
             s.send(self.servsend)
@@ -36,26 +38,30 @@ class Game:
         return self.english, self.samplelist
 
     def stage0(self):
-        self.name = input("Enter name: ")
+        self.inp = input("Enter name: ")
+        self.name = [self.inp]
         self.servsend = pickle.dumps(self.name)
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((self.HOST, self.PORT))
             s.send(self.servsend)
             self.data = s.recv(1024)
-            self.num = pickle.loads(self.data)
+            self.lis = pickle.loads(self.data)
+            self.num = self.lis[0]
+            self.token = self.lis[1]
             s.close()
         return self.num
 
     def get_difficulty(self, level):
-        self.servsend = pickle.dumps(level)
+        self.listsend = [level, self.token]
+        self.servsend = pickle.dumps(self.listsend)
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as d:
             d.connect((self.HOST, self.PORT))
             d.send(self.servsend)
             d.close()
 
     def check_answer(self, guess):
-
-        self.servsend = pickle.dumps(guess)
+        self.listsend = [guess, self.token]
+        self.servsend = pickle.dumps(self.listsend)
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as d:
             d.connect((self.HOST, self.PORT))
             d.send(self.servsend)
@@ -65,7 +71,8 @@ class Game:
         return self.thing
 
     def play_again(self):
-        self.servsend = pickle.dumps("new")
+        self.listsend = ["new", self.token]
+        self.servsend = pickle.dumps(self.listsend)
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as d:
             d.connect((self.HOST, self.PORT))
             d.send(self.servsend)
