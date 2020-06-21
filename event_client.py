@@ -37,9 +37,8 @@ class Game:
 
         return self.english, self.samplelist
 
-    def stage0(self):
-        self.inp = input("Enter name: ")
-        self.name = [self.inp]
+    def stage0(self, username, password):
+        self.name = [username, password, 0]
         self.serv_send = pickle.dumps(self.name)
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((self.HOST, self.PORT))
@@ -48,8 +47,9 @@ class Game:
             self.list_data = pickle.loads(self.data)
             self.num = self.list_data[0]
             self.token = self.list_data[1]
+            self.good = self.list_data[2]
             s.close()
-        return self.num
+        return self.num, self.good
 
     def get_difficulty(self, level):
         self.list_send = [level, self.token]

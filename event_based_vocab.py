@@ -84,9 +84,13 @@ for i in range(10):
                           150+50*i, win.height-400, 40, 60))
 print(len(difflist))
 thelist = []
-
-entername = Label("Enter your name in the terminal.",
+letcomb = ''
+entername = Label("Enter your username in the terminal. Press enter when done",
                   18, win.width//2, win.height-200, 1, 1)
+
+userinp = Label(letcomb, 15,
+                win.width//2, 200,
+                100, 100)
 
 
 def stage2():
@@ -170,11 +174,11 @@ def display_result(guess):
 @win.event
 def on_mouse_motion(x, y, dx, dy):
     global playbutton, stage, question, data, answers, samplelist, needed, points, count
-    if stage == 0:
-        needed = vocab_game.stage0()
-        points, count = vocab_game.get_score()
-        question, data, answers, samplelist = stage2()
-        stage = 2
+    # if stage == 0:
+    #     needed = vocab_game.stage0()
+    #     points, count = vocab_game.get_score()
+    #     question, data, answers, samplelist = stage2()
+    #     stage = 2
     if stage == 1:
         for i in range(10):
             if difflist[i].in_hitbox(x, y):
@@ -257,12 +261,105 @@ def on_mouse_release(x, y, LEFT, none):
 
 
 @win.event
+def on_key_release(symbol, none):
+    global userinp, stage, entername, letcomb, username, password, needed, ifgood, question, data, answers, samplelist, points, count
+    if symbol == pyglet.window.key.A:
+        let = 'a'
+    if symbol == pyglet.window.key.B:
+        let = 'b'
+    if symbol == pyglet.window.key.C:
+        let = 'c'
+    if symbol == pyglet.window.key.D:
+        let = 'd'
+    if symbol == pyglet.window.key.E:
+        let = 'e'
+    if symbol == pyglet.window.key.F:
+        let = 'f'
+    if symbol == pyglet.window.key.G:
+        let = 'g'
+    if symbol == pyglet.window.key.H:
+        let = 'h'
+    if symbol == pyglet.window.key.I:
+        let = 'i'
+    if symbol == pyglet.window.key.J:
+        let = 'j'
+    if symbol == pyglet.window.key.K:
+        let = 'k'
+    if symbol == pyglet.window.key.L:
+        let = 'l'
+    if symbol == pyglet.window.key.M:
+        let = 'm'
+    if symbol == pyglet.window.key.N:
+        let = 'n'
+    if symbol == pyglet.window.key.O:
+        let = 'o'
+    if symbol == pyglet.window.key.P:
+        let = 'p'
+    if symbol == pyglet.window.key.Q:
+        let = 'q'
+    if symbol == pyglet.window.key.R:
+        let = 'r'
+    if symbol == pyglet.window.key.S:
+        let = 's'
+    if symbol == pyglet.window.key.T:
+        let = 't'
+    if symbol == pyglet.window.key.U:
+        let = 'u'
+    if symbol == pyglet.window.key.V:
+        let = 'v'
+    if symbol == pyglet.window.key.W:
+        let = 'w'
+    if symbol == pyglet.window.key.X:
+        let = 'x'
+    if symbol == pyglet.window.key.Y:
+        let = 'y'
+    if symbol == pyglet.window.key.Z:
+        let = 'z'
+    if symbol == pyglet.window.key.ENTER:
+        let = 'no'
+    if let == "no":
+        if stage == 0:
+            entername = Label("Enter your password in the terminal. Press enter when done.",
+                              18, win.width//2, win.height-200, 1, 1)
+            username = letcomb
+            letcomb = ''
+            stage = -1
+
+            userinp = Label(letcomb, 15,
+                            win.width//2, 200,
+                            100, 100)
+        elif stage == -1:
+
+            password = letcomb
+            needed, ifgood = vocab_game.stage0(username, password)
+            if ifgood == 1:
+                points, count = vocab_game.get_score()
+                question, data, answers, samplelist = stage2()
+                stage = 2
+            if ifgood == 0:
+                stage = 0
+                letcomb = ''
+                userinp = Label(letcomb, 15,
+                                win.width//2, 200,
+                                100, 100)
+                entername = Label("The information you entered was invalid. Try your username again.",
+                                  18, win.width//2, win.height-200, 1, 1)
+    else:
+
+        letcomb += let
+        userinp = Label(letcomb, 15,
+                        win.width//2, 200,
+                        100, 100)
+
+
+@win.event
 def on_draw():
     global stage
     win.clear()
     if gameOver == False:
-        if stage == 0:
+        if stage == 0 or stage == -1:
             entername.draw()
+            userinp.draw()
 
         if stage == 2 or stage == 3:
             question.draw()

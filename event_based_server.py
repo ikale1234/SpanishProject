@@ -87,21 +87,25 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 print('Connected by', addr)
                 data = conn.recv(1024)
                 iflist = pickle.loads(data)
-                if len(iflist) == 1:
-                    getq = iflist[0]
+                if len(iflist) == 3:
+                    username = iflist[0]
+                    password = iflist[1]
                     if count == 0:
-                        name_list.append(getq)
-                        game_list.append(Game())
-                        game_list[0].get_difficulty(1)
-                        count += 1
-
+                        if username == password:
+                            name_list.append(username)
+                            game_list.append(Game())
+                            game_list[0].get_difficulty(1)
+                            count += 1
+                            good = 1
+                        else:
+                            good = 0
                         points = 10
                         token = 0
-                        sendlist = [points, token]
+                        sendlist = [points, token, good]
                         conn.send(pickle.dumps(sendlist))
-                    elif getq not in name_list:
+                    elif username not in name_list:
                         game_list.append(Game())
-                        name = getq
+                        name = username
                         game_list[count].get_difficulty(1)
                         token = count
 
