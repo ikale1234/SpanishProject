@@ -347,9 +347,17 @@ def on_key_release(symbol, none):
     else:
 
         letcomb += let
-        userinp = Label(letcomb, 15,
-                        win.width//2, 200,
-                        100, 100)
+        if stage == 0:
+            userinp = Label(letcomb, 15,
+                            win.width//2, 200,
+                            100, 100)
+        if stage == -1:
+            hidden = ""
+            for i in range(len(letcomb)):
+                hidden += "*"
+            userinp = Label(hidden, 15,
+                            win.width//2, 200,
+                            100, 100)
 
 
 @win.event
