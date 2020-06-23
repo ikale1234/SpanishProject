@@ -317,6 +317,27 @@ def on_key_release(symbol, none):
         let = 'z'
     if symbol == pyglet.window.key.ENTER:
         let = 'no'
+    if symbol == pyglet.window.key._1:
+        let = '1'
+    if symbol == pyglet.window.key._2:
+        let = '2'
+    if symbol == pyglet.window.key._3:
+        let = '3'
+    if symbol == pyglet.window.key._4:
+        let = '4'
+    if symbol == pyglet.window.key._5:
+        let = '5'
+    if symbol == pyglet.window.key._6:
+        let = '6'
+    if symbol == pyglet.window.key._7:
+        let = '7'
+    if symbol == pyglet.window.key._8:
+        let = '8'
+    if symbol == pyglet.window.key._9:
+        let = '9'
+    if symbol == pyglet.window.key._0:
+        let = '0'
+
     if let == "no":
         if stage == 0:
             entername = Label("Enter your password in the terminal. Press enter when done.",
@@ -351,7 +372,7 @@ def on_key_release(symbol, none):
             userinp = Label(letcomb, 15,
                             win.width//2, 200,
                             100, 100)
-        if stage == -1:
+        if stage == - 1:
             hidden = ""
             for i in range(len(letcomb)):
                 hidden += "*"

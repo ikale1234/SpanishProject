@@ -69,11 +69,21 @@ class Game:
         return self.right
 
 
+userlist = []
+userfile = open(os.path.join("SpanishWords", "users.txt"), "r")
+for i in range(3):
+    userlist.append(userfile.readline())
+for i in range(len(userlist)):
+    if userlist[i][-1:] == "\n":
+        userlist[i] = userlist[i][:-1]
+    userlist[i] = userlist[i].split()
+
 host = '127.0.0.1'
 port = 2020
 x = 1
 running = True
 count = 0
+valid = 0
 game_list = []
 name_list = []
 options = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -90,13 +100,18 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 if len(iflist) == 3:
                     username = iflist[0]
                     password = iflist[1]
+                    for i in userlist:
+                        if i[0] == username:
+                            if i[1] == password:
+                                valid = 1
                     if count == 0:
-                        if username == password:
+                        if valid == 1:
                             name_list.append(username)
                             game_list.append(Game())
                             game_list[0].get_difficulty(1)
                             count += 1
                             good = 1
+                            valid = 0
                         else:
                             good = 0
                         points = 10
@@ -104,13 +119,19 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                         sendlist = [points, token, good]
                         conn.send(pickle.dumps(sendlist))
                     elif username not in name_list:
-                        game_list.append(Game())
-                        name = username
-                        game_list[count].get_difficulty(1)
-                        token = count
-
+                        if valid == 1:
+                            game_list.append(Game())
+                            name = username
+                            game_list[count].get_difficulty(1)
+                            token = count
+                            count += 1
+                            valid = 0
+                            good = 1
+                        else:
+                            good = 0
+                            token = -1
                         points = 10
-                        sendlist = [points, token]
+                        sendlist = [points, token, good]
                         conn.send(pickle.dumps(sendlist))
                     else:
                         points = 10
