@@ -88,8 +88,8 @@ letcomb = ''
 entername = Label("Enter your username in the terminal. Press enter when done",
                   18, win.width//2, win.height-200, 1, 1)
 
-userinp = Label(letcomb, 15,
-                win.width//2, 200,
+userinp = Label("Username: "+letcomb, 15,
+                win.width//2, 300,
                 100, 100)
 
 
@@ -260,9 +260,15 @@ def on_mouse_release(x, y, LEFT, none):
             exit()
 
 
+hidden = ''
+passwordlabel = Label("Password: "+hidden, 15,
+                      win.width//2, 200,
+                      100, 100)
+
+passcomb = ''
 @win.event
 def on_key_release(symbol, none):
-    global userinp, stage, entername, letcomb, username, password, needed, ifgood, question, data, answers, samplelist, points, count
+    global passwordlabel, passcomb, userinp, stage, entername, letcomb, username, password, needed, ifgood, question, data, answers, samplelist, points, count
     if symbol == pyglet.window.key.A:
         let = 'a'
     if symbol == pyglet.window.key.B:
@@ -337,22 +343,23 @@ def on_key_release(symbol, none):
         let = '9'
     if symbol == pyglet.window.key._0:
         let = '0'
+    if symbol == pyglet.window.key.BACKSPACE:
+        let = "back"
 
     if let == "no":
         if stage == 0:
             entername = Label("Enter your password in the terminal. Press enter when done.",
                               18, win.width//2, win.height-200, 1, 1)
             username = letcomb
-            letcomb = ''
             stage = -1
 
-            userinp = Label(letcomb, 15,
-                            win.width//2, 200,
-                            100, 100)
         elif stage == -1:
 
-            password = letcomb
+            password = passcomb
+            print(username, password)
             needed, ifgood = vocab_game.stage0(username, password)
+            passcomb = ''
+            letcomb = ''
             if ifgood == 1:
                 points, count = vocab_game.get_score()
                 question, data, answers, samplelist = stage2()
@@ -361,24 +368,38 @@ def on_key_release(symbol, none):
                 stage = 0
                 letcomb = ''
                 userinp = Label(letcomb, 15,
-                                win.width//2, 200,
+                                win.width//2, 300,
                                 100, 100)
                 entername = Label("The information you entered was invalid. Try your username again.",
                                   18, win.width//2, win.height-200, 1, 1)
-    else:
-
-        letcomb += let
+    if let == "back":
         if stage == 0:
-            userinp = Label(letcomb, 15,
-                            win.width//2, 200,
+            letcomb = letcomb[:-1]
+            userinp = Label("Username: "+letcomb, 15,
+                            win.width//2, 300,
+                            100, 100)
+        if stage == -1:
+            passcomb = passcomb[:-1]
+            hidden = ""
+            for i in range(len(passcomb)):
+                hidden += "*"
+            passwordlabel = Label("Password: "+hidden, 15,
+                                  win.width//2, 200,
+                                  100, 100)
+    else:
+        if stage == 0:
+            letcomb += let
+            userinp = Label("Username: "+letcomb, 15,
+                            win.width//2, 300,
                             100, 100)
         if stage == - 1:
+            passcomb += let
             hidden = ""
-            for i in range(len(letcomb)):
+            for i in range(len(passcomb)):
                 hidden += "*"
-            userinp = Label(hidden, 15,
-                            win.width//2, 200,
-                            100, 100)
+            passwordlabel = Label("Password: "+hidden, 15,
+                                  win.width//2, 200,
+                                  100, 100)
 
 
 @win.event
@@ -389,6 +410,7 @@ def on_draw():
         if stage == 0 or stage == -1:
             entername.draw()
             userinp.draw()
+            passwordlabel.draw()
 
         if stage == 2 or stage == 3:
             question.draw()
