@@ -86,7 +86,11 @@ count = 0
 valid = 0
 game_list = []
 name_list = []
+game2_list = []
+name2_list = []
 options = [1, 2, 3, 4, 5, 6, 7, 8]
+usercount = 0
+users = []
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((host, port))
     while True:
@@ -98,71 +102,95 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 data = conn.recv(1024)
                 iflist = pickle.loads(data)
                 if len(iflist) == 3:
+                    gametype = iflist[2]
                     username = iflist[0]
                     password = iflist[1]
+
                     for i in userlist:
                         if i[0] == username:
                             if i[1] == password:
                                 valid = 1
-                    if count == 0:
+                    if gametype == 1:
                         if valid == 1:
-                            name_list.append(username)
-                            game_list.append(Game())
-                            game_list[0].get_difficulty(1)
-                            count += 1
-                            good = 1
-                            valid = 0
-                        else:
-                            good = 0
-                        points = 10
-                        token = 0
-                        sendlist = [points, token, good]
-                        conn.send(pickle.dumps(sendlist))
-                    elif username not in name_list:
-                        if valid == 1:
-                            game_list.append(Game())
-                            name = username
-                            game_list[count].get_difficulty(1)
-                            token = count
-                            count += 1
-                            valid = 0
-                            good = 1
+                            usercount += 1
+                            if usercount == 2:
+                                name2_list.append(username)
+                                game2_list.append(Game())
+                                game2_list[0].get_difficulty(1)
+                                count += 1
+                                token = count
+                                good = 1
+                                valid = 0
+                                canstart = 1
+                                usercount = 0
+                            else:
+                                canstart = 0
                         else:
                             good = 0
                             token = -1
                         points = 10
-                        sendlist = [points, token, good]
+                        sendlist = [points, token, good, canstart]
                         conn.send(pickle.dumps(sendlist))
-                    else:
-                        points = 10
-                        conn.send(pickle.dumps(points))
-                if len(iflist) == 2:
-                    getq = iflist[0]
-                    num = iflist[1]
-                    if getq == 35:
-                        vals = [game_list[num].numright,
-                                game_list[num].numdone]
-                        val_bytes = pickle.dumps(vals)
-                        conn.send(val_bytes)
-                    if getq == "gq":
-                        gamedata = game_list[num].getChoices()
-                        gd_bytes = pickle.dumps(gamedata)
-                        conn.send(gd_bytes)
-                    elif getq in options:
-                        if game_list[num].samplelist[getq] == game_list[num].word:
-                            val = 1
-                            game_list[num].numright += 1
+                    if gametype == 0:
+                        if count == 0:
+                            if valid == 1:
+                                name_list.append(username)
+                                game_list.append(Game())
+                                game_list[0].get_difficulty(1)
+                                count += 1
+                                good = 1
+                                valid = 0
+                            else:
+                                good = 0
+                            points = 10
+                            token = 0
+                            sendlist = [points, token, good]
+                            conn.send(pickle.dumps(sendlist))
+                        elif username not in name_list:
+                            if valid == 1:
+                                game_list.append(Game())
+                                name = username
+                                game_list[count].get_difficulty(1)
+                                token = count
+                                count += 1
+                                valid = 0
+                                good = 1
+                            else:
+                                good = 0
+                                token = -1
+                            points = 10
+                            sendlist = [points, token, good]
+                            conn.send(pickle.dumps(sendlist))
                         else:
-                            val = 0
-                        game_list[num].numdone += 1
-                        if game_list[num].numdone == points:
-                            end = 1
-                        elif game_list[num].numdone < points:
-                            end = 0
+                            points = 10
+                            conn.send(pickle.dumps(points))
+                    if len(iflist) == 2:
+                        getq = iflist[0]
+                        num = iflist[1]
+                        if getq == 35:
+                            vals = [game_list[num].numright,
+                                    game_list[num].numdone]
+                            val_bytes = pickle.dumps(vals)
+                            conn.send(val_bytes)
+                        if getq == "gq":
+                            gamedata = game_list[num].getChoices()
+                            gd_bytes = pickle.dumps(gamedata)
+                            conn.send(gd_bytes)
+                        elif getq in options:
+                            if game_list[num].samplelist[getq] == game_list[num].word:
+                                val = 1
+                                game_list[num].numright += 1
+                            else:
+                                val = 0
+                            game_list[num].numdone += 1
+                            if game_list[num].numdone == points:
+                                end = 1
+                            elif game_list[num].numdone < points:
+                                end = 0
 
-                        values = [val, end, game_list[num].numright,
-                                  game_list[num].numdone, game_list[num].word]
-                        val_list = pickle.dumps(values)
-                        conn.send(val_list)
+                            values = [val, end, game_list[num].numright,
+                                      game_list[num].numdone, game_list[num].word]
+                            val_list = pickle.dumps(values)
+                            conn.send(val_list)
         except KeyboardInterrupt:
             break
