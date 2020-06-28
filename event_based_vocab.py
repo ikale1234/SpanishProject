@@ -372,7 +372,7 @@ def on_key_release(symbol, none):
                                 100, 100)
                 entername = Label("The information you entered was invalid. Try your username again.",
                                   18, win.width//2, win.height-200, 1, 1)
-    if let == "back":
+    elif let == "back":
         if stage == 0:
             letcomb = letcomb[:-1]
             userinp = Label("Username: "+letcomb, 15,

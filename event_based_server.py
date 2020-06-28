@@ -164,33 +164,33 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                         else:
                             points = 10
                             conn.send(pickle.dumps(points))
-                    if len(iflist) == 2:
-                        getq = iflist[0]
-                        num = iflist[1]
-                        if getq == 35:
-                            vals = [game_list[num].numright,
-                                    game_list[num].numdone]
-                            val_bytes = pickle.dumps(vals)
-                            conn.send(val_bytes)
-                        if getq == "gq":
-                            gamedata = game_list[num].getChoices()
-                            gd_bytes = pickle.dumps(gamedata)
-                            conn.send(gd_bytes)
-                        elif getq in options:
-                            if game_list[num].samplelist[getq] == game_list[num].word:
-                                val = 1
-                                game_list[num].numright += 1
-                            else:
-                                val = 0
-                            game_list[num].numdone += 1
-                            if game_list[num].numdone == points:
-                                end = 1
-                            elif game_list[num].numdone < points:
-                                end = 0
+                if len(iflist) == 2:
+                    getq = iflist[0]
+                    num = iflist[1]
+                    if getq == 35:
+                        vals = [game_list[num].numright,
+                                game_list[num].numdone]
+                        val_bytes = pickle.dumps(vals)
+                        conn.send(val_bytes)
+                    if getq == "gq":
+                        gamedata = game_list[num].getChoices()
+                        gd_bytes = pickle.dumps(gamedata)
+                        conn.send(gd_bytes)
+                    elif getq in options:
+                        if game_list[num].samplelist[getq] == game_list[num].word:
+                            val = 1
+                            game_list[num].numright += 1
+                        else:
+                            val = 0
+                        game_list[num].numdone += 1
+                        if game_list[num].numdone == points:
+                            end = 1
+                        elif game_list[num].numdone < points:
+                            end = 0
 
-                            values = [val, end, game_list[num].numright,
-                                      game_list[num].numdone, game_list[num].word]
-                            val_list = pickle.dumps(values)
-                            conn.send(val_list)
+                        values = [val, end, game_list[num].numright,
+                                  game_list[num].numdone, game_list[num].word]
+                        val_list = pickle.dumps(values)
+                        conn.send(val_list)
         except KeyboardInterrupt:
             break
