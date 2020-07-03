@@ -9,7 +9,7 @@ import pickle
 class Game:
     def __init__(self):
         self.HOST = '127.0.0.1'  # The server's hostname or IP address
-        self.PORT = 2020    # The port used by the server
+        self.PORT = 2021    # The port used by the server
 
     def get_score(self):
         self.list_send = self.list_send = [35, self.token]
@@ -48,8 +48,9 @@ class Game:
             self.num = self.list_data[0]
             self.token = self.list_data[1]
             self.good = self.list_data[2]
+            self.waiting = self.list_data[3]
             s.close()
-        return self.num, self.good
+        return self.num, self.good, self.waiting
 
     def get_difficulty(self, level):
         self.list_send = [level, self.token]

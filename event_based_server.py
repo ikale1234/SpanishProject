@@ -79,7 +79,7 @@ for i in range(len(userlist)):
     userlist[i] = userlist[i].split()
 
 host = '127.0.0.1'
-port = 2020
+port = 2021
 x = 1
 running = True
 count = 0
@@ -111,7 +111,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                             if i[1] == password:
                                 valid = 1
                     if gametype == 1:
-                        if valid == 1:
+                        if valid == 1 and username not in name2_list:
                             usercount += 1
                             if usercount == 2:
                                 name2_list.append(username)
@@ -122,9 +122,21 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                                 good = 1
                                 valid = 0
                                 canstart = 1
+                            else:
+                                name2_list.append(username)
+                                good = 1
+                                canstart = 0
+                                token = -1
+
+                        elif username in name2_list and valid == 1:
+                            if usercount == 2:
+                                canstart = 1
+                                token = count
                                 usercount = 0
                             else:
                                 canstart = 0
+                                token = -1
+                            good = 1
                         else:
                             good = 0
                             token = -1

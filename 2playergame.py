@@ -4,7 +4,8 @@ import random
 import verborganizer
 import sys
 import pyglet
-from event_client import Game
+from twoplayer_client import Game
+import time
 win = pyglet.window.Window(width=800, height=600)
 game = True
 
@@ -91,6 +92,9 @@ entername = Label("Enter your username in the terminal. Press enter when done",
 userinp = Label("Username: "+letcomb, 15,
                 win.width//2, 300,
                 100, 100)
+
+waitmessage = Label("Waiting for opponent.",
+                    18, win.width//2, win.height-200, 1, 1)
 
 
 def stage2():
@@ -264,7 +268,8 @@ hidden = ''
 passwordlabel = Label("Password: "+hidden, 15,
                       win.width//2, 200,
                       100, 100)
-
+gameready = Label("Opponent found!",
+                  18, win.width//2, win.height-200, 1, 1)
 passcomb = ''
 @win.event
 def on_key_release(symbol, none):
@@ -357,13 +362,17 @@ def on_key_release(symbol, none):
 
             password = passcomb
             print(username, password)
-            needed, ifgood = vocab_game.stage0(username, password)
+            needed, ifgood, waiting = vocab_game.stage0(username, password)
             passcomb = ''
             letcomb = ''
             if ifgood == 1:
-                points, count = vocab_game.get_score()
-                question, data, answers, samplelist = stage2()
-                stage = 2
+                if waiting == 0:
+                    stage = 7
+
+                # points, count = vocab_game.get_score()
+                # question, data, answers, samplelist = stage2()
+                else:
+                    stage = 8
             if ifgood == 0:
                 stage = 0
                 letcomb = ''
@@ -402,11 +411,32 @@ def on_key_release(symbol, none):
                                   100, 100)
 
 
+# def get_waiting():
+#     global stage, needed, ifgood, waiting
+#     if stage == 7:
+#         needed, ifgood, waiting = vocab_game.stage0(username, password)
+#         if waiting == 1:
+#             stage = 8
+
+
+# pyglet.clock.schedule_interval(get_waiting(), 1)
+
+
 @win.event
 def on_draw():
-    global stage
+    global stage, needed, ifgood, waiting, username, password
     win.clear()
     if gameOver == False:
+        if stage == 7:
+            waitmessage.draw()
+            time.sleep(1)
+
+            needed, ifgood, waiting = vocab_game.stage0(username, password)
+            if waiting == 1:
+                stage = 8
+        if stage == 8:
+            gameready.draw()
+
         if stage == 0 or stage == -1:
             entername.draw()
             userinp.draw()
