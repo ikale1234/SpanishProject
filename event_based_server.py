@@ -69,6 +69,70 @@ class Game:
         return self.right
 
 
+class Game2p:
+    def __init__(self):
+
+        self.listdata = []
+        self.thelist = []
+        if len(sys.argv) == 1:
+            self.listdata = verborganizer.build("SpanishWords")
+        elif len(sys.argv) == 2:
+            try:
+                self.listdata = verborganizer.build(sys.argv[1])
+            except FileNotFoundError:
+                print("That is an invalid directory.")
+                quit()
+        self.vlist = []
+        self.nlist = []
+        self.numright1 = 0
+        self.numright2 = 0
+        self.numdone = 0
+        self.samplelist = [1, 2, 3, 4, 5]
+
+    def getChoices(self):
+        # change later      lchoice = random.choice([vlist, nlist])
+        # CHANGE BELOW LATER
+        self.lchoice = self.vlist
+        # CHANGE ABOVE LATER
+        self.samplelist = random.sample(self.lchoice, 8)
+
+        self.word = random.choice(self.samplelist)
+        if self.lchoice == self.vlist:
+            for verb in self.listdata["Verbs"]:
+                if self.word == verb["Infinitive"]:
+                    self.english = verb["English"]
+        if self.lchoice == self.nlist:
+            for noun in self.listdata["Nouns"]:
+                if self.word == noun["Spanish"]:
+                    self.english = noun["English"]
+        self.data = []
+        self.data.append(self.english)
+        self.data.append(self.samplelist)
+
+        return self.data
+
+    def get_difficulty(self, level):
+
+        for i in range(level):
+            self.thelist.append(i+1)
+
+            for i in self.thelist:
+                for verb in self.listdata["Verbs"]:
+                    if i == verb["Difficulty"]:
+                        self.vlist.append(verb["Infinitive"])
+            for i in self.thelist:
+                for noun in self.listdata["Nouns"]:
+                    if i == noun["Difficulty"]:
+                        self.nlist.append(noun["Spanish"])
+
+    def check_answer(self, guess, let):
+        if guess == let or guess == let.lower():
+            self.right = True
+        else:
+            self.right = False
+        return self.right
+
+
 userlist = []
 userfile = open(os.path.join("SpanishWords", "users.txt"), "r")
 for i in range(3):
@@ -83,6 +147,7 @@ port = 2021
 x = 1
 running = True
 count = 0
+count2p = -1
 valid = 0
 game_list = []
 name_list = []
@@ -91,6 +156,7 @@ name2_list = []
 options = [1, 2, 3, 4, 5, 6, 7, 8]
 usercount = 0
 users = []
+waitfor2 = 0
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((host, port))
     while True:
@@ -114,11 +180,11 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                         if valid == 1 and username not in name2_list:
                             usercount += 1
                             if usercount == 2:
+                                count2p += 1
                                 name2_list.append(username)
-                                game2_list.append(Game())
-                                game2_list[0].get_difficulty(1)
-                                count += 1
-                                token = count
+                                game2_list.append(Game2p())
+                                game2_list[count2p].get_difficulty(1)
+                                token = count2p
                                 good = 1
                                 valid = 0
                                 canstart = 1
@@ -131,7 +197,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                         elif username in name2_list and valid == 1:
                             if usercount == 2:
                                 canstart = 1
-                                token = count
+                                token = count2p
                                 usercount = 0
                             else:
                                 canstart = 0
@@ -204,5 +270,14 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                                   game_list[num].numdone, game_list[num].word]
                         val_list = pickle.dumps(values)
                         conn.send(val_list)
+                    if getq == 36:
+                        if waitfor2 == 0:
+                            gamechoices = game2_list[num].getChoices()
+                            waitfor2 += 1
+                        if waitfor2 == 1:
+                            waitfor2 = 0
+                        gsend = pickle.dumps(gamechoices)
+                        conn.send(gsend)
+
         except KeyboardInterrupt:
             break

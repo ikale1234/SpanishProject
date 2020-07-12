@@ -373,6 +373,7 @@ def on_key_release(symbol, none):
                 # question, data, answers, samplelist = stage2()
                 else:
                     stage = 8
+                    question, data, answers, samplelist = stage2()
             if ifgood == 0:
                 stage = 0
                 letcomb = ''
@@ -424,7 +425,7 @@ def on_key_release(symbol, none):
 
 @win.event
 def on_draw():
-    global stage, needed, ifgood, waiting, username, password
+    global stage, needed, ifgood, waiting, username, password, question, data, answers, samplelist
     win.clear()
     if gameOver == False:
         if stage == 7:
@@ -434,8 +435,12 @@ def on_draw():
             needed, ifgood, waiting = vocab_game.stage0(username, password)
             if waiting == 1:
                 stage = 8
+                question, data, answers, samplelist = stage2()
         if stage == 8:
-            gameready.draw()
+            question.draw()
+            for i in answers:
+                i.draw()
+            data.draw()
 
         if stage == 0 or stage == -1:
             entername.draw()

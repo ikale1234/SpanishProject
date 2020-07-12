@@ -24,7 +24,7 @@ class Game:
         return self.right, self.done
 
     def getChoices(self):
-        self.list_send = self.list_send = ["gq", self.token]
+        self.list_send = self.list_send = [36, self.token]
         self.serv_send = pickle.dumps(self.list_send)
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.connect((self.HOST, self.PORT))
